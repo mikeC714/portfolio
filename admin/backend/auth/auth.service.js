@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import db from "../config/postgres.config.js";
+import { AppError, AuthenticationError } from "../middleware/error.middleware.js";
 
 export default {
 	async newUser(username, password){
