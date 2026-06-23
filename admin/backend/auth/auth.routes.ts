@@ -12,3 +12,5 @@ authRouter.use(authMiddleware.requireAuth)
 
 authRouter.post('/auth/logout', authControllers.logOut)
 authRouter.delete('/auth/delete', authControllers.delete);
+
+export default authRouter;

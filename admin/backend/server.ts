@@ -7,6 +7,7 @@ import session from "express-session";
 
 const app = express();
 
+app.use("/api", authRouter);
 
 
 
@@ -41,5 +42,5 @@ app.use(session({
 	resave: false
 }))
 
-app.listen(process.env.PORT, () => console.log(`Server is running on PORT:${PORT}`));
+app.listen(process.env.PORT, () => console.log(`Server is running on PORT:${process.env.PORT}`));
 

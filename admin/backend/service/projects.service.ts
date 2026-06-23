@@ -4,8 +4,25 @@ import bucketService from "./s3.service.js";
 import fs from "node:fs/promises";
 import path from "path";
 
+interface NewProject{
+	title: string,
+	img?: Buffer | null,
+	status: string,
+	msg:string,
+	stack:Array<string>,
+	link:string
+}
+interface Project{
+	id:string,
+	title:string,
+	msg:string,
+	stack:Array<string>,
+	link:string,
+	img?:Buffer | null,
+}
+
 export default{
-	async getProjects(userId){
+	async getProjects(userId:string):Promise<Project>{
 		if(!userId) throw new AuthenticationError("Failed to provide all needed fields inorder to upload project.");
 		try{
 			const results = await db.query(
@@ -25,9 +42,10 @@ export default{
 			throw err;
 		}
 	},
-	async uploadNewProject(userId,{ title, img, status, msg, stack, link }){
+	async uploadNewProject(userId:string, project: NewProject){
+ 		const { title, img, status, msg, stack, link } = project; 
 		if(!userId) throw new AuthenticationError("Failed to provide user id.");
-		if(!title || !img || !status || !msg || !stack || !link) throw new AppError("Failed to provide all needed fields inorder to upload project.");
+		if(!title || !img || !status || !msg || !stack || !link) throw new AppError("Failed to provide all needed fields inorder to upload project.", 400);
 		try{
 			const imgType = path.extname(img);
 			const imgBuffer = await fs.readFile(img);
@@ -50,9 +68,10 @@ export default{
 			throw err;
 		}	
 	},
-	async updateProject(userId, { title, img, status, msg, stack, link }){
+	async updateProject(userId:string, project: NewProject){
+		const { title, img, status, msg, stack, link } = project;
 		if(!userId) throw new AuthenticationError("Failed to provide user id.");
-		if(!title || !img || !status || !msg || !stack || !link) throw new AppError("Failed to provide all needed fields inorder to upload project.");
+		if(!title || !img || !status || !msg || !stack || !link) throw new AppError("Failed to provide all needed fields inorder to upload project.", 400);
 		try{
 			await db.query(
 				`UPDATE projects 
@@ -65,7 +84,7 @@ export default{
 			throw err;
 		}
 	},
-	async deleteProject(userId, project_id){
+	async deleteProject(userId:string, project_id:string){
 		if(!userId) throw new AuthenticationError("Failed to provide user id.");
 		if(!project_id) throw new AppError("Failed to provide project id. Cannot delete project without valid project id.", 400);
 		try{
