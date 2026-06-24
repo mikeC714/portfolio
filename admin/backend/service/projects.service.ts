@@ -1,29 +1,29 @@
 import db from "../config/postgres.config.js";
 import { AppError, AuthenticationError } from "../middleware/error.middleware.js";
+import { Project } from "../src/types/project.d.js"
 import bucketService from "./s3.service.js";
 import fs from "node:fs/promises";
 import path from "path";
 
-interface NewProject{
-	title: string,
-	img?: Buffer | null,
-	status: string,
-	msg:string,
-	stack:Array<string>,
-	link:string
-}
-interface Project{
-	id:string,
-	title:string,
-	msg:string,
-	stack:Array<string>,
-	link:string,
-	img?:Buffer | null,
-}
 
 export default{
+	async getOneProject(userId:string, projectId:string):Promise<Project>{
+		if(!userId) throw new AuthenticationError("Failed to provide userId inorder to get project");
+		try{
+			const results = await db.query(
+				`SELECT * 
+					FROM projects
+					WHERE id = $1
+					AND user_id = $2
+				`,[projectId, userId]
+			);
+			return results.rows[0]; 
+		}catch(err){
+			throw err;
+		}
+	},
 	async getProjects(userId:string):Promise<Project>{
-		if(!userId) throw new AuthenticationError("Failed to provide all needed fields inorder to upload project.");
+		if(!userId) throw new AuthenticationError("Failed to provide userId inorder to upload project.");
 		try{
 			const results = await db.query(
 				`SELECT projects.*, screenshots.key
@@ -42,10 +42,10 @@ export default{
 			throw err;
 		}
 	},
-	async uploadNewProject(userId:string, project: NewProject){
- 		const { title, img, status, msg, stack, link } = project; 
+	async uploadNewProject(userId:string, project: Project){
+ 		const { title, img, msg, stack, link } = project; 
 		if(!userId) throw new AuthenticationError("Failed to provide user id.");
-		if(!title || !img || !status || !msg || !stack || !link) throw new AppError("Failed to provide all needed fields inorder to upload project.", 400);
+		if(!title || !img || !msg || !stack || !link) throw new AppError("Failed to provide all needed fields inorder to upload project.", 400);
 		try{
 			const imgType = path.extname(img);
 			const imgBuffer = await fs.readFile(img);
@@ -54,30 +54,30 @@ export default{
 			await db.query(
 				`WITH project AS(
 					INSERT INTO projects
-						(user_id, title, status, msg, stack, link)
-					VALUES($1, $2, $3, $4, $5, $6)
+						(user_id, title, msg, stack, link)
+					VALUES($1, $2, $3, $4, $5)
 					RETURNING id
 				)INSERT INTO screenshots
 					(user_id, project_id, s3_key, type, size)
-					SELECT $1, id, $7, $8, $9 
+					SELECT $1, id, $6, $7, $8
 					FROM project
 					RETURNING id
-				`,[userId, title, status, msg, stack, link, key, imgType, imgBuffer.length]
+				`,[userId, title, msg, stack, link, key, imgType, imgBuffer.length]
 			)
 		}catch(err){
 			throw err;
 		}	
 	},
-	async updateProject(userId:string, project: NewProject){
-		const { title, img, status, msg, stack, link } = project;
+	async updateProject(userId:string, project: Project){
+		const { title, img, msg, stack, link } = project;
 		if(!userId) throw new AuthenticationError("Failed to provide user id.");
-		if(!title || !img || !status || !msg || !stack || !link) throw new AppError("Failed to provide all needed fields inorder to upload project.", 400);
+		if(!title || !img || !msg || !stack || !link) throw new AppError("Failed to provide all needed fields inorder to upload project.", 400);
 		try{
 			await db.query(
 				`UPDATE projects 
-					SET title = $1, status = $2, msg = $3, stack = $4, link = $5
-					WHERE user_id = $6
-					AND (title, status, msg, stack, link) IS DISTINCT FROM ($1, $2, $3, $4, $5)
+					SET title = $1, msg = $2, stack = $3, link = $4
+					WHERE user_id = $5 
+					AND (title,msg, stack, link) IS DISTINCT FROM ($1, $2, $3, $4)
 				`
 			)
 		}catch(err){

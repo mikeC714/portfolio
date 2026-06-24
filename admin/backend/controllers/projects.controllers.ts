@@ -1,27 +1,35 @@
-import { AppError } from "../middleware/error.middleware.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import projectService from "../service/projects.service.js";
 import projectsService from "../service/projects.service.js";
+import { Project } from "../src/types/project.js"; 
+import { Response, Request } from "express";
+
 
 
 export default{
-	create: catchAsync(async(req, res) => {
+	create: catchAsync(async(req:Request, res:Response):Promise<void> => {
 		const data = req.body;
-		await projectService.uploadNewProject(req.session.userId, data);
-		return res.status(200).json({ success: true });
+		await projectService.uploadNewProject(req.session.userId as string, data);
+		return res.status(200).json({ success: true }) as unknown as void;
 	}),
-	get: catchAsync(async(req, res) => {
-		const projects = await projectsService.getProjects(req.session.userId);
-		return res.status(200).json({ projects });
+	getAll: catchAsync(async(req:Request, res:Response):Promise<void> => {
+		const projects = await projectsService.getProjects(req.session.userId as string);
+		return res.status(200).json({ projects }) as unknown as void;
 	}),
-	delete: catchAsync(async(req, res) =>{
+	get:catchAsync(async(req:Request<{ projectId:Project["id"] }>, res:Response) => {
 		const { projectId } = req.params;
-		await projectService.deleteProject(req.session.userId, projectId);
-		return res.status(200).json({ success: true })
+		const project = await projectService.getProject(req.session.userId as string, projectId);
+		return res.status(200).json({ project });
 	}),
-	update: catchAsync(async(req, res) => {
+	delete: catchAsync(async(req:Request<{ projectId: Project["id"] }>, res:Response):Promise<void> => {
 		const { projectId } = req.params;
-		await projectsService.updateProject(req.session.userId, projectId);
+		await projectService.deleteProject(req.session.userId as string, projectId);
+		return res.status(200).json({ success: true }) as unknown as void;
+	}),
+	update: catchAsync(async(req:Request<{ projectId: Project["id"] }>, res:Response) => {
+		const { projectId } = req.params;
+		const project = await projectService.getProject(req.session.userId, projectId);
+		await projectsService.updateProject(req.session.userId as string, project);
 		return res.status(200).json({ success: true });
 	}),
 }
