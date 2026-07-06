@@ -37,7 +37,7 @@ export default{
 			// images with their know destinations
 			// const imgs = await bucketService.getImage();	
 		
-		return results.rows;
+		return results.rows as any;
 		}catch(err){
 			throw err;
 		}

@@ -8,6 +8,8 @@ stackRouter.use(authMiddleware.requireAuth);
 stackRouter.use(authMiddleware.requireAccess);
 
 stackRouter.get('/stack', stackControllers.get) 
+stackRouter.put('/stack/update/lang', stackControllers.updateLang);
+stackRouter.put('/stack/update/framework', stackControllers.updateFramework);
 stackRouter.post('/stack/add');
 stackRouter.put('/stack/update/lang', stackControllers.updateLang);
 stackRouter.put('/stack/update/framework', stackControllers.updateFramework);

@@ -64,7 +64,7 @@ export default{
 				`,[userId]
 			);
 			if(results.rows.length === 0) return null; 
-			return results.rows;
+			return results.rows as any;
 		}catch(err){
 			throw err;
 		}
