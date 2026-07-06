@@ -3,5 +3,6 @@ interface User{
 	last_name?:string | null,
 	username: string,
 	password: string,
+	secret?: string,
 }
 export default User;

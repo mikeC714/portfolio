@@ -28,7 +28,18 @@ import { AuthenticationError } from "../middleware/error.middleware.js";
 // }
 
 export default{
-	async getStack(userId:string):Promise<Stack>{
+	async add(userId:string,lang:Lang){
+		if(!userId) throw new AuthenticationError("Failed to provide userId inorder to get project");
+		try{
+			await db.query(
+				`INSERT INTO stack
+					VALUES($1,$2,$3,$4,$5)	
+				`),[userId, lang]
+		}catch(err){
+			throw err;
+		}
+	},
+	async getStack(userId:string):Promise<Stack | null>{
 		if(!userId) throw new AuthenticationError("Failed to provide userId inorder to get project");
 		try{
 			const results = await db.query(
@@ -52,42 +63,43 @@ export default{
 					GROUP BY lang.id, lang.name, lang.status, lang.projectNums
 				`,[userId]
 			);
+			if(results.rows.length === 0) return null; 
 			return results.rows;
 		}catch(err){
 			throw err;
 		}
 	},
-	async updateLang(userId:string, lang:Lang){
-		if(!userId) throw new AuthenticationError("Failed to provide userId inorder to get project");
+	async updateLang(lang:Lang){
 		try{
 			await db.query(
 				`INSERT INTO languages (id, name, status, projectNum)
 					VALUES($1,$2,$3,$4)	
-					ON CONFLICT (id)
 					ON CONFLICT (name)
 					DO UPDATE SET 
 						status = EXCLUDED.status,
 						projectNum = EXCLUDED.projectNum
+					WHERE languages.status IS DISTINCT FROM EXCLUDED.status
+					OR languages.projectNum IS DISTINCT FROM EXCLUDED.projectNum
 				`,[lang.id, lang.name, lang.status, lang.projectNum]
 			)
 		}catch(err){
 			throw err;
 		}
 	},
-	async updateFramework(userId:string, framework:Framework){
-		if(!userId) throw new AuthenticationError("Failed to provide userId inorder to get project");
+	async updateFramework(framework:Framework){
 		try{
 			await db.query(
 				`INSERT INTO  frameworks(id, name, status)
 					VALUES($1,$2,$3)	
-					ON CONFLICT (id)
 					ON CONFLICT (name)
 					DO UPDATE SET 
-						status = EXCLUDED.status,
+						status = EXCLUDED.status
+					WHERE frameworks.status IS DISTINCT FROM EXCLUDED.status
 				`,[framework.id,framework.name,framework.status]
 			)		
 		}catch(err){
 			throw err;
 		}
 	},
+	
 }

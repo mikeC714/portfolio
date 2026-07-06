@@ -4,7 +4,7 @@ import projectsControllers from "../controllers/projects.controllers.js";
 
 export const projectRouter = express.Router();
 
-projectRouter.use(authMiddleware.requireAccess);
+projectRouter.use(authMiddleware.requireAuth);
 projectRouter.use(authMiddleware.requireAccess);
 
 

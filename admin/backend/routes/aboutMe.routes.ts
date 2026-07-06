@@ -1,13 +1,12 @@
 import express from "express";
 import authMiddleware from "../auth/auth.middleware";
+import aboutMeControllers from "../controllers/aboutMe.controllers.js";
 export const aboutMeRouter = express.Router();
 
-aboutMeRouter.use(authMiddleware.requireAccess);
+aboutMeRouter.use(authMiddleware.requireAuth);
 aboutMeRouter.use(authMiddleware.requireAccess);
 
-aboutMeRouter.get('/about-me');
-aboutMeRouter.put('/about-me/update');
-aboutMeRouter.post('/about-me/add');
-aboutMeRouter.delete('/about-me/delete');
+aboutMeRouter.post('/about-me/add', aboutMeControllers.setAndGet);
+aboutMeRouter.patch('/about-me/update', aboutMeControllers.update);
 
 

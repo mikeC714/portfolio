@@ -1,8 +1,10 @@
 import { catchAsync } from "../utils/catchAsync.js";
-import authService from "./auth.service.js";
+import { db, test_db } from "../config/postgres.config.js";
+import { AuthService } from "./auth.service.js";
 import User from "../src/types/user.js";
 import { AppError } from "../middleware/error.middleware.js";
 import { Request, Response } from "express";
+const authService = new AuthService(test_db);
 
 
 export default { 
@@ -25,8 +27,9 @@ export default {
 		});
 	}),
 	signUp: catchAsync(async(req:Request<{},{},User>, res:Response) => {
-		const { username, password } = req.body;
+		const { username, password, secret } = req.body;
 		if(!username || !password) throw new AppError("Failed to provide vaild field requirements. Please try again.", 400);
+		if(secret !== process.env.SECRET_FOR_ROLE) return res.status(401).json({ error: "You my friend are unauthorized." });
 
 		const user = await authService.newUser({ username, password });
 		await new Promise<void>((res, rej) => {
@@ -34,10 +37,11 @@ export default {
 				if(err) rej(err);
 				req.session.userId = user.id;
 				req.session.username = user.username;
+				req.session.role = "admin";
 				res();
 			});
 		});
-		return res.status(200).json({
+		return res.status(201).json({
 			success: true,
 			user
 		});
