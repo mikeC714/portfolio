@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
+:root{
+	background:linear-gradient( 
+					  160deg,
+					  #0a0a0a 0%,
+					  #1c1c1c 35%,
+					  #3a3a3a 70%,
+					  #565656 100%
+					);
+	color:#F2F0Ef;
+	font-family: 'Google Sans Flex', sans-serif;
+}
+
+.header{
+	width:100%;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	grid-row:1;
+	grid-column:1/ span 2;
+}
+.mainNavListContainer{
+	display:flex;
+	align-items:center;
+	width:100%;
+}
+.mainNavList{
+	display:flex;
+	align-items:center;
+	list-style:none;
+	gap:10em;
+}
+li, a{
+	text-decoration:none;
+}
+li, a, .toggleVoteBtn{
+	font-family:var(--font-family);
+	font-weight:270;
+	font-size:14px;
+	color:white;
+}
+.toggleVoteBtn{
+	background:none;
+	border:none;
+}
