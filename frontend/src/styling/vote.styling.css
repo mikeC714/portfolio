@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
+:root{
+	background:#040707;
+	color:#F2F0Ef;
+	font-family: 'Google Sans Flex', sans-serif;
+}
+
+.eventContainer{
+	z-index:1;
+	height:80%;
+	width:20%;
+	background-color: rgba(255, 255, 255, .06);
+	border: 1px solid rgba(255, 255, 255, .08);
+	border-radius: 12px;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	position:fixed;
+	top:10%;
+	right:0;
+	clip-path:inset(0 0 0 100%);
+	transition:clip-path .18s steps(6,end);
+}
+.eventContainer.active{
+	clip-path:inset(0 0 0 0%);
+}
+
+.voteContainer{
+	height:100%;
+	width:100%;
+	display:grid;
+	grid-template-rows:.2fr repeat(4, auto);
+	grid-template-columns:repeat(4, auto);
+}
+.voteHeader{
+	grid-row:1;
+	grid-column:2/span 2;
+	text-align:center;
+	font-family:var(--font-familly);
+	font-size:14px;
+}
+.voteItem{
+	align-self:center;
+	justify-self:center;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	gap:12px;
+	align-items:center;
+	border-radius:12px;
+	width:60%;
+	height:60%;
+	background:rgba(255,255,255,.06);
+	border:1px solid rgba(255,255,255,.2);
+	transition:border-color 1s ease;
+}
+.voteItem:hover{
+	background:rgba(255,255,255,.09);
+	border:1px solid rgba(255,255,255,.9);
+	border:1px solid rgba(255,255,255,.5);
+}
+
+.Rust{
+	grid-column:2;
+	grid-row:2;
+}
+.Rust:hover{
+	background:#B7410E;
+	box-shadow:inset 0 0 30px rgba(0,0,0,.7);
+}
+.GO{
+	grid-column:3;
+	grid-row:2;
+}
+.GO:hover{
+	background:#00ADD8;
+	box-shadow:inset 0 0 30px rgba(0,0,0,.7);
+}
+.Assembly{
+	grid-column:3;
+	grid-row:4;
+}
+.Assembly:hover{
+	background:#A020F0;
+	box-shadow:inset 0 0 30px rgba(0,0,0,.7);
+}
+.C{
+	grid-column:2;
+	grid-row:3;
+}
+.Cpp{
+	grid-column:2;
+	grid-row:4;
+}
+.C:hover, .C:hover{
+	background:#659AD2;
+	box-shadow:inset 0 0 30px rgba(0,0,0,.7);
+}
+.Python{
+	grid-column:3;
+	grid-row:3;
+}
+.Python:hover{
+	background:#FFD343;
+	box-shadow:inset 0 0 30px rgba(0,0,0,.7);
+}
+

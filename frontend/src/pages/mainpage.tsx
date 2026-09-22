@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { NavBar } from "../comps/navbar.tsx";
-import { EventDropDown } from "../comps/event.tsx";
+import { EventBar } from "../comps/event.tsx";
 import { Link } from "react-router-dom";
 import { useVotes } from "../vote.hooks.tsx";
+import { socket } from "../config.tsx";
+import { RepoFish, Crab } from "../comps/repo.tsx";
+import { ProjectCard } from "../comps/projects.tsx";
+import { projects } from "../utils/projects.tsx";
 import { RustLogo } from "../assets/rust.tsx";
 import { PythonLogo } from "../assets/python.tsx"
 import { GoLogo } from "../assets/golang.tsx"
@@ -12,23 +16,40 @@ import { JsLogo, TsLogo, FastifyLogo, ReactLogo, NodeLogo } from "../assets/js.t
 import { PostgresLogo, SqliteLogo } from "../assets/sql.tsx";
 import type { VOTE } from "../types/vote.d.ts";
 
+
+type JSON<T> = string & { readonly __brand: T };
+type REPO = {
+	repoName:string;
+	repoUrl:string;
+	langs:string | Array<string>;
+	bio:string;  
+}
+type SOCKET_DATA = JSON<REPO>;
+
+
 export function MainPage(){
 	const { get, update } = useVotes();
 	const [votes, setVotes] = useState<VOTE[]>([]);
+	const [repos, setRepos] = useState<REPO[]>([]);
 	const { getLoading, getIsErr, getErr } = get({ setVotes });
 	const { mutate, updateSuccess, updateLoading, updateIsErr, updateErr } = update();
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [selectedVote, setSelectedVote] = useState<null | string>(null);
-	const [showPointer, setShowPointer] = useState<boolean>(false);
+	const [hooked, setHooked] = useState<string | null>(null);
 
-	// run once
-	// set pointer to be visible 
-	// triggering a pointer to appear pointing towards the voting to encourage people to vote
 	useEffect(() => {
-		setShowPointer(true);	
-		setTimeout(() => setShowPointer(false), 4000)
+		socket.on("repo", (data:SOCKET_DATA) => {
+			try{
+				let parsed = JSON.parse(data);
+				setRepos([...repos, parsed]);
+			}catch(e){
+				throw e;
+			}	
+		})
+		return () => {
+			socket.off("repo");
+		};
 	},[]);
-
 	
 	const handleVote = (lang:string) => {
 		setSelectedVote(lang);	
@@ -37,6 +58,10 @@ export function MainPage(){
 
 	const handleOpenVote = () => {
 		setIsVisible((prev:boolean) => !prev)
+	}
+
+	const hook = (repoName:string) => {
+		setHooked(repoName);
 	}
 
 	const languages = [
@@ -59,48 +84,59 @@ export function MainPage(){
 
 	return(
 		<div className="mainPage">
-			{
-				isVisible && (
-					<div className="eventContainer">
-						<EventDropDown
-							vote={votes}
-							handleVote={handleVote}
-							success={updateSuccess}
-							loading={updateLoading}
-							isErr={updateIsErr}
-							err={updateErr}
-						/>
-					</div>
-				)
-			}
+			<div className="eventContainer">
+				<EventBar
+					vote={votes}
+					handleVote={handleVote}
+					success={updateSuccess}
+					loading={updateLoading}
+					isErr={updateIsErr}
+					err={updateErr}
+				/>
+			</div>
 			<header className="header">
 				<NavBar
 					toggleEvent={handleOpenVote}
 				/>
 			</header>
-				{
-					showPointer &&(
-						<div className={`pointerContainer$`}>
-							<div className="pointerContent">
-								<div className="arrowContainer">
-									<div className="arrowShaft">
-										<div className="arrowHead"></div>
-									</div>
-								</div>
-							</div>
-							<div className="pointerTxtContainer">
-								<p className="pointerTxT">Help me decide what language I should learn next :)</p>
-							</div>
-						</div>
-					)
-				}
 			<div className="mainPageBody">	
 
 				<div className="primaryGridContainer">
-					<div className="avatar"></div>
+					<div className="fishTank">
+						<div className="waves">
+							<div className="waves1"></div>
+							<div className="waves2"></div>
+							<div className="waves3"></div>
+						</div>
+						<div className="water"></div>
+						{repos.length > 0 ? (
+							<div className="repoFishContainer">
+								{repos.map((repo:REPO) => (
+									<RepoFish
+										repoName={repo.repoName}
+										bio={repo.bio}
+										langs={repo.langs}
+										hook={hook}
+									/>
+								))};
+							</div>
+						):
+						<div className="crabContainer">
+							<Crab />	
+						</div>
+						}
+					</div>
 					<div className="aboutMe">
-						<h4>HEADER</h4>
-						<p>PARA</p>	
+						<header className="aboutMeHeader">
+							<h2 className="aboutMeName">Michael Carter</h2>
+							<span className="aboutMeLocation"><a href="">Maryland, USA</a></span>
+						</header>
+						<div className="aboutMeContent">
+							<p className="aboutMePara">Self taught Software Engineer based in Maryland.
+								I build full stack applications by day while deepening my knowledge of computer architecture and robotics at night.
+							</p>	
+							<button className="aboutMeLearnMore">Learn More</button>
+						</div>
 					</div>
 					<div className="primaryGridFooter">
 					{languages.map((lang:{ name:string, icon:any }) => (
@@ -125,9 +161,20 @@ export function MainPage(){
 					</div>
 				 </div>
 
-				<div className="mainPageSubTxt2">
-					<Link to="/projects">View My Work</Link>
-				</div>	
+				<section className="projectsSection">
+					<h2 className="projectsHeader">projects</h2>		
+					<div className="projectGrid">
+						{projects.map((p:any) => (
+							<ProjectCard 
+								img={p.img}
+								title={p.title}
+								bio={p.bio}
+								languages={p.languages}
+							/>		
+
+						))}
+					</div>
+				</section>	
 			</div>
 		</div>
 	)
