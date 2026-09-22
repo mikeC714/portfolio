@@ -1,6 +1,9 @@
+import pythonLogo from "./imgs/python-original.svg";
+
+
 export const PythonLogo = () => (
 	<img 
-		src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" 
+		src={pythonLogo} 
 		height={60}
 		width={60}
 	/>

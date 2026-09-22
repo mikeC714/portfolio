@@ -1,9 +1,5 @@
-export const GoLogo = () => (
-	<img 
-		src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original.svg" 
-		height={60}	
-		width={60}
-	/>
-)
+import goLogo from "./imgs/go-original.svg"; 
+
+export const GoLogo = () => <img src={goLogo} height={60} width={60} />
 
           
