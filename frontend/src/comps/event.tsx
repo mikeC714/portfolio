@@ -1,8 +1,9 @@
+
 import { RustLogo } from "../assets/rust.tsx";
 import { PythonLogo } from "../assets/python.tsx"
 import { GoLogo } from "../assets/golang.tsx"
 import { WasmLogo } from "../assets/wasm.tsx"
-import { CppLogo } from "../assets/cpp.tsx"
+import { CppLogo, CLogo } from "../assets/c.tsx";
 import type { VOTE } from "../types/vote.d.ts";
 
 interface Props{

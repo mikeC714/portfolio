@@ -1,6 +1,9 @@
+import rustLogo from "./imgs/rust-original.svg";
+
+
 export const RustLogo = () =>(
 	<img 
-		src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/rust/rust-original.svg" 
+		src={rustLogo} 
 		height={60}
 		width={60}
 	/>
