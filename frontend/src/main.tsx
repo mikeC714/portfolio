@@ -6,6 +6,8 @@ import "./styling/contactbar.styling.css";
 import "./styling/vote.styling.css";
 import "./styling/about.styling.css";
 import "./styling/projects.styling.css";
+import "./styling/fish.styling.css";
+import "./styling/crab.styling.css";
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
