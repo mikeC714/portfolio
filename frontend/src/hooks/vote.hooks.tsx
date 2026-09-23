@@ -22,10 +22,10 @@ async function apiFetch(url = "", method = "GET", body?:any){
 	}
 };
 
-export function useVotes():VOTE_METHODS{
+export function useVotes({ setVotes, setVote }:VOTE_PROPS):VOTE_METHODS{
 	const queryClient = useQueryClient();
 
-	function useGet({ setVotes }:VOTE_PROPS){
+	function useGet(){
 		const { data, isPending, isError, error } = useQuery({
 			queryKey:["votes"],
 			queryFn: async() => await apiFetch(`${import.meta.env.VITE_API}/votes-get`),
@@ -41,10 +41,12 @@ export function useVotes():VOTE_METHODS{
 			getErr: error
 		}
 	}
+
 	function useUpdate(){
 		const { mutate, isPending, isSuccess, isError, error } = useMutation({
 			mutationFn: async(body) => await apiFetch(`${import.meta.env.VITE_API}/votes`, "PUT", body),
-			onSuccess: () => {
+			onSuccess: (_, body) => {
+				setVote({ voted:true, language:body })
 				queryClient.invalidateQueries({ queryKey:["votes"] })				
 			},
 			onError: () => {

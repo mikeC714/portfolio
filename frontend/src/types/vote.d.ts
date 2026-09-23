@@ -5,10 +5,11 @@ type VOTE = {
 
 type VOTE_PROPS = {
 	setVotes: React.Dispatch<React.SetStateAction<Array<VOTE>>>
+	setVote:any
 }
 
 type VOTE_METHODS = { 
-	get: ({setVotes}:PROPS) => {
+	get: () => {
 		getLoading:boolean,
 		getIsErr:boolean,
 		getErr:Error | null,

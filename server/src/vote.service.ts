@@ -1,5 +1,5 @@
 import type { Pool } from "pg";
-import type { VOTE_TARGET, VOTE_ROW, VOTES } from "./types/vote.d.ts";
+import type { VOTE_TARGET, VOTE_INPUT, VOTES, VOTE_ROW } from "./types/vote.d.ts";
 
 export class VoteService{
 	private db:Pool
@@ -16,7 +16,7 @@ export class VoteService{
 		}
 	}
 
-	inputVote = async(input:{vote:number | string, target:VOTE_TARGET}):Promise<VOTES | undefined> => {
+	inputVote = async(input:VOTE_INPUT):Promise<VOTE_ROW | undefined> => {
 		if(!input) return;	
 		try{
 			const query = await this.db.query<VOTE_ROW>(`
@@ -31,7 +31,7 @@ export class VoteService{
 							UNION ALL
 							SELECT name, count FROM languages WHERE name NOT IN (SELECT name FROM upsert)
 							ORDER BY name
-						  `, [input.target]
+						  `, [input.language]
 						);
 			return query.rows;
 		}catch(e:any){

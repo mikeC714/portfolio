@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import type { VoteService } from "./vote.service.ts";
-import type { VOTE_ROW } from "./types/vote.d.ts";
+import type { VOTE_INPUT } from "./types/vote.d.ts";
 
 
 export class VoteController{
@@ -18,7 +18,7 @@ export class VoteController{
 		}
 	}
 
-	updateVote = async(req:Request<{ ReqBody:VOTE_ROW }>, res:Response) => {
+	updateVote = async(req:Request<{ ReqBody:VOTE_INPUT }>, res:Response) => {
 		try{
 			const queryRes = await this.service.inputVote(req.body);
 			return res.status(200).json({ sucess:true, queryRes })

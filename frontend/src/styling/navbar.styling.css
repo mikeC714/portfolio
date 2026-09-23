@@ -40,6 +40,7 @@
 	color:var(--color);
 	font-family:var(--font-family);
 	font-size:14px;
+	cursor:pointer;
 }
 
 .contactBar{

@@ -1,5 +1,6 @@
 import goLogo from "./imgs/go-original.svg"; 
+import type {HxW} from "../types/HxW.d.ts";
 
-export const GoLogo = () => <img src={goLogo} height={60} width={60} />
+export const GoLogo = ({ h, w }:HxW) => <img src={goLogo} height={h ?? 60} width={w ?? 60} />
 
           
