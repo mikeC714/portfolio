@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
+:root{
+	background:#040707;
+	color:#F2F0Ef;
+	font-family: 'Google Sans Flex', sans-serif;
+}
+
+.fishContainer{
+	border:1px solid white;
+	left:0;
+	width:4em;
+	height:4em;
+}
+.fishBody{
+	display:flex;
+	flex-direction:column;
+	font-size:12px;
+}
+.repoLine{
+	border:1px solid white;
+}

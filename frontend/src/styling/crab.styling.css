@@ -12,20 +12,25 @@
 	position:relative;
 }
 .crabBodyContainer{
-	border:white;
-	width:4em;
-	height:3em;
+	width:5em;
+	height:3.4em;
 	background-color:#B7410E;
-	border-radius:30px;
+	border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
 	display:flex;
 	flex-direction:column;
+	position:relative;
 }
 .crabHat{
 	background-color:black;	
-	height:18px;
-	width:64px;
-	border-top-left-radius:100px;
-	border-top-right-radius:100px;
+	width:5em;
+	height:1.6em;
+	border-radius:50% 50% 0% 0% / 72% 72% 0% 0%;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+}
+.crabHatDesign{
+	transform:rotate(110deg);
 }
 .crabEyes{
 	display:flex;	
@@ -49,19 +54,16 @@
 	background-color:#C7C6C1;
 	border-radius:20px;
 }
-.crabSmile{
-	position:fixed;
-	display:flex;
-	justify-content:center;
-	width:100%;
-	height:20%;
-	padding:1px;
-}
 .crabCurve{
-	border-bottom:2px solid black;
 	border-radius:10em;
 	width:50%;
 	height:50%;
+}
+.crabArms{
+	
+}
+.crabArmL{
+	border:2px solid black;
 }
 
 

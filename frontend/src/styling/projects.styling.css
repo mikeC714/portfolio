@@ -5,16 +5,62 @@
 	font-family: 'Google Sans Flex', sans-serif;
 }
 
-.projectsSection{
+.projects{
+	grid-row:2;
+	grid-column:1/5;
 	height:100%;
-	display:flex;
-	justify-content:center;
-	flex-direction:column;
-	gap:10em;
+	width:100%;
 }
-.projectsGrid{
-	display:grid;
+.projectsContainer{
+	height:100%;
+	display:flex;	
+	align-items:center;
+	justify-content:center;
+	gap:4em;
 }
 .projectCard{
-	
+	border:1px solid rgba(255,255,255,.4);
+	max-width:32em;
+	line-height:1.4em;
+	display:grid;
+	grid-template-columns:repeat(4, 1fr);
+	grid-template-rows:1fr auto .2fr;
+	padding:10px;
+	border-radius:22px;
+}
+
+.projectImgContainer{
+	grid-row:1;
+	grid-column:1/5;
+}
+
+.projectInfoContainer{
+	grid-row:2;
+	grid-column:1/5;
+}
+.projectCardFooter{
+	grid-row:3;
+	grid-column:1/5;
+	display:flex;
+	justify-content:space-evenly;
+	align-items:center;
+}
+.projectLangCellContainer{ width:100%;
+	border-radius:8px;
+	display:flex;
+}
+.projectLangCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 340;
+  color: #1a1a1a;
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--lang-color, transparent) 30%, transparent),
+      color-mix(in srgb, var(--lang-color, transparent) 30%, transparent)
+    ),
+    white;
 }

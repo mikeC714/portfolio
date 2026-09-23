@@ -5,24 +5,72 @@
 	font-family: 'Google Sans Flex', sans-serif;
 }
 
+.voteButton {
+	grid-row: 6;
+	grid-column: 4;        
+	background-color: rgba(255, 255, 255, .06);
+	border: 1px solid rgba(255, 255, 255, .09);
+	border-radius: 12px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	overflow:hidden;
+	padding-bottom:10px;
+	cursor:pointer;
+	transition:border-color 1s ease;
+}
+.voteButton:hover{
+	border-color: rgba(255, 255, 255, .4);
+}
+.voteHeader {
+	font-family: var(--font-family);
+	font-weight: 440;
+	font-size:14px;
+	letter-spacing: 1px;
+}
+
 .eventContainer{
+	position:fixed;
 	z-index:1;
-	height:80%;
-	width:20%;
+	top:10%;
+	right:0;
+	height:60%;
+	width:28em;
 	background-color: rgba(255, 255, 255, .06);
 	border: 1px solid rgba(255, 255, 255, .08);
 	border-radius: 12px;
 	display:flex;
 	justify-content:center;
 	align-items:center;
-	position:fixed;
-	top:10%;
-	right:0;
-	clip-path:inset(0 0 0 100%);
-	transition:clip-path .18s steps(6,end);
+	transform-origin:right center;
+	animation:openVote .6s cubic-bezier(.2,.8,.2,1) forwards;
 }
-.eventContainer.active{
-	clip-path:inset(0 0 0 0%);
+.eventContainer.close{
+	animation:closeVote .4s cubic-bezier(.4,0,.6,1) forwards;
+}
+
+@keyframes openVote {
+  from {
+    transform: perspective(800px) rotateY(-35deg);
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    transform: perspective(800px) rotateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes closeVote {
+  from {
+    transform: perspective(800px) rotateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    transform: perspective(800px) rotateY(-35deg);
+    clip-path: inset(0 0 0 100%);
+  }
 }
 
 .voteContainer{
@@ -53,12 +101,21 @@
 	background:rgba(255,255,255,.06);
 	border:1px solid rgba(255,255,255,.2);
 	transition:border-color 1s ease;
+	cursor:pointer;
 }
 .voteItem:hover{
 	background:rgba(255,255,255,.09);
 	border:1px solid rgba(255,255,255,.9);
 	border:1px solid rgba(255,255,255,.5);
 }
+.voteExit{
+	cursor:pointer;
+	height:fit-content;
+	width:fit-content;
+	margin-left:10px;
+	margin-top:10px;
+}
+
 
 .Rust{
 	grid-column:2;

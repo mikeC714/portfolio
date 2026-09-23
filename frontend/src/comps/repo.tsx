@@ -1,3 +1,6 @@
+import { SwordIcon } from "../assets/sword.tsx";
+
+
 type PROPS = {
 	repoName:string;
 	repoUrl?:string;
@@ -8,11 +11,10 @@ type PROPS = {
 
 function RepoFish({ repoName, bio, langs, hook }:PROPS){
 	return(
-		<div className="fishConatiner">
+		<div className="fishConatiner" key={repoName}>
 			<div className="fishBody" onClick={() => hook(repoName)}>
 				<h2 className="repoName">{repoName}</h2>
 				<div className="repoLine"></div>
-				<p className="repoPara">{bio}</p>
 				{Array.isArray(langs) ? langs.map(lang => (
 					<div className={`repoLang`}>{lang}</div>
 				)): 
@@ -24,14 +26,14 @@ function RepoFish({ repoName, bio, langs, hook }:PROPS){
 	)
 }
 
-function Crab(){
+function RepoCrab(){
 	return(
 		<div className="crab">
 			<div className="crabContent">
 				<div className="crabBodyContainer">
 					<div className="crabHat">
 						<div className="crabHatDesign">
-							
+							<SwordIcon />	
 						</div>
 					</div>
 					<div className="crabEyes">
@@ -42,23 +44,19 @@ function Crab(){
 							<div className="crabEyeHighlight"></div>
 						</div>
 					</div>
-				</div>
-				<div className="crabSmile">
-					<div className="crabDimple left"></div>
-					<div className="crabCurve"></div>
-					<div className="crabDimple right"></div>
-				</div>
-						
-				<div className="crabArmL">
-					<div className="crabPincer">
-						<div className="crabClawL left"></div>
-						<div className="crabClawR left"></div>
-					</div>
-				</div>
-				<div className="crabArmR">
-					<div className="crabPincer">
-						<div className="crabClawL right"></div>
-						<div className="crabClawR right"></div>
+					<div className="crabArms">
+						<div className="crabArmL">
+							<div className="crabPincer">
+							<div className="crabClawL left"></div>
+							<div className="crabClawR left"></div>
+							</div>
+						</div>
+						<div className="crabArmR">
+							<div className="crabPincer">
+							<div className="crabClawL right"></div>
+							<div className="crabClawR right"></div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div className="crabLeg1"></div>
@@ -71,4 +69,4 @@ function Crab(){
 };
 
 
-export { RepoFish, Crab }
+export { RepoFish, RepoCrab }
