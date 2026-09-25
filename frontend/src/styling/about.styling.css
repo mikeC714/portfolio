@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
+:root{
+	background:#040707;
+	color:#F2F0Ef;
+	font-family: 'Google Sans Flex', sans-serif;
+}
+
+.aboutMe {
+	grid-column: 3 / 5;
+	grid-row: 3/ 6;
+	background-color: rgba(255, 255, 255, .06);
+	border: 1px solid rgba(255, 255, 255, .08);
+	border-radius: 12px;
+	padding-left:20px;
+	padding-right:20px;
+	display:flex;
+	flex-direction:column;
+
+}
+.aboutMeHeader{
+	display:flex;
+	align-items:center;
+	gap:4em;
+}
+.aboutMeName{
+	gap:2px;
+	font-weight:510;
+	font-size:18px;
+	text-align:left;
+}
+.aboutMeStr{
+	color:#F8F8FF;
+}
+.aboutMeContent{
+	display:flex;
+	flex-direction:column;
+	text-align:left;
+	position:relative;
+	height:100%;
+	width:100%;
+}
+.aboutMePara{
+	color:#595a58;
+	line-height:2.4em;
+	letter-spacing:1%;
+}
+.aboutMeLearnMore{
+	position:absolute;
+	width:10em;
+	padding:10px;
+	border-radius:6px;
+	right:0;
+	bottom:14px;
+	font-family:var(--font-family);
+	font-weight:420;
+	letter-spacing:4%;
+	border:none;
+	background:#FBFCF8;
+	transition:opacity 1s ease;
+	cursor:pointer;
+}
+.aboutMeLearnMore:hover{
+	opacity: .8
+}
+

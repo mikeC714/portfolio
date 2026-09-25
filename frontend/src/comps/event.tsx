@@ -6,20 +6,22 @@ import { CppLogo, CLogo } from "../assets/c.tsx";
 import { voteLanguages } from "../utils/votes.tsx";
 import { X } from "lucide-react";
 
-interface Props{
+type Lang = 'Rust' | 'GO' | 'Assembly' | 'Python' | 'Cpp' | 'C';
+interface PROPS{
 	vote:any;
-	voteCount:any;
+	totalVotes:Array<{ language:Lang, count:number }>;
 	handleVote: (lang:string) => void;
 	handleClose:() => void;
-	success:boolean;
-	loading:boolean;
-	isErr:boolean;
-	err:Error | null
+	updateLoading:boolean;
+	updateIsErr:boolean;
+	updateErr:Error | null
+	getLoading:boolean;
+	getIsErr:boolean;
+	getErr:Error | null;
 }
-type Lang = 'Rust' | 'GO' | 'Assembly' | 'Python' | 'Cpp' | 'C';
 
 
-export function EventBar({ vote, voteCount, handleVote, handleClose, loading, isErr, err, success }:Props){
+export function EventBar({ vote, totalVotes, handleVote, handleClose, updateLoading, updateIsErr, updateErr, getLoading, getIsErr, getErr }:PROPS){
 	const icons:Record<Lang, React.ReactNode> = {
 		"Rust": <RustLogo />,
 		"GO": <GoLogo />,
@@ -39,8 +41,28 @@ export function EventBar({ vote, voteCount, handleVote, handleClose, loading, is
 
 	return(
 		<div className="voteContainer">
+			{
+				updateLoading && (
+					<div>spinner</div>
+				)
+			}
+			{
+				updateIsErr || updateErr !== null && (
+					<div>{updateErr.message}</div>
+				)
+			}
+			{
+				getLoading && (
+					<div>spinner</div>
+				)	
+			}
+			{
+				getIsErr || getErr !== null && (
+					<div>{getErr?.message}</div>
+				)	
+			}
 			<h3 className="voteHeader">What would you suggest to learn next?</h3>
-			{ ( vote === null || vote.language === "") ?(
+			{ ( vote === null || vote.language === "") ? (
 				
 				voteLanguages.map(item => (
 					<div 
@@ -51,17 +73,19 @@ export function EventBar({ vote, voteCount, handleVote, handleClose, loading, is
 						{item.lang}
 					</div>
 				))
-			): 
-				<>
-					{ voteCount.map((item:{ language:Lang, count:number }) => (
-						<div className="voteCountDisplay"> 
-							<div className="voteItem" key={item.language}>
-								<span className="voteItemIcon">{icons[item.language]}- {item.count} </span>
-								<div className="voteCountBar" style={{ width: vote.count, backgroundColor:barColors[item.language] }}></div>
-							</div>	
-						</div>
+			):( 
+				<div className="totalVoteContainer">	
+					{ totalVotes.map((item:{ language:Lang, count:number }) => (
+						<div className="voteItem" 
+							key={item.language} 
+							style={{ backgroundColor:"green" }} 
+						>
+							<span className="voteItemIcon">{icons[item.language]}- {item.count} </span>
+							<div className="voteCountBar" style={{ width: vote.count, backgroundColor:barColors[item.language] }}></div>
+						</div>	
 					))}
-				</>
+				</div>
+			  )
 			}
 			<span className="voteExit" onClick={handleClose}><X /></span>
 		</div>

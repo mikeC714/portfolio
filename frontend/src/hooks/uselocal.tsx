@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 
+type CACHE = { voted:boolean, language:string }
+
 export function useLocalStorage(key:string = "vote", value:{ voted:boolean, language:string }){
-	const [voted, setVoted] = useState<{ voted:boolean, language:string }>(() => {
+	const [voted, setVoted] = useState<CACHE>(() => {
 		try{
 			const cache = window.localStorage.getItem(key);
 			return cache !== null ? JSON.parse(cache) : null;
