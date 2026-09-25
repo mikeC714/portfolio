@@ -3,6 +3,10 @@ import { socket } from "../config.tsx";
 import { NavBar } from "../comps/navbar.tsx";
 import { EventBar } from "../comps/event.tsx";
 import { ProjectCard } from "../comps/projects.tsx";
+import { Hobbies } from "../comps/about/hobbies.tsx";
+import { Philosophy } from "../comps/about/philosophy.tsx";
+import { About } from "../comps/about/about.tsx";
+import { Background } from "../comps/about/background.tsx";
 import { useVotes } from "../hooks/vote.hooks.tsx";
 import { projects } from "../utils/projects.tsx";
 import { useUnmount } from "../hooks/unmount.tsx";
@@ -26,16 +30,18 @@ type REPO = {
 	bio:string;  
 }
 type SOCKET_DATA = JSON<REPO>;
-
+type Section = "Background" | "Hobbies" | "Philosophy";
 
 export function MainPage(){
-	const [votes, setVotes] = useState<VOTE[]>([]);
+	const [totalVotes, setTotalVotes] = useState<VOTE[]>([]);
 	const [repos, setRepos] = useState<REPO[]>([]);
 	const [vote, setVote] = useLocalStorage("vote", { voted:false, language:"" })
-	const { get, update } = useVotes({ setVotes, setVote });
+	const { get, update } = useVotes({ setTotalVotes, setVote });
 	const [hovered, setHovered] = useState<boolean>(false);
 	const [openVote, setOpenVote] = useState<boolean>(false);
 	const [hooked, setHooked] = useState<string | null>(null);
+	const [display, setDisplay] = useState<Section>("Background");
+	const [learnMore, setLearnMore] = useState<boolean>(false);
 	const { getLoading, getIsErr, getErr } = get();
 	const { mutate, updateSuccess, updateLoading, updateIsErr, updateErr } = update();
 
@@ -56,16 +62,9 @@ export function MainPage(){
 	const locationRender = useUnmount(hovered, 3000);
 	const voteRender = useUnmount(openVote, 500);
 	
-	const handleVote = (lang:string) => {
-		mutate(lang)
-	}
-
-	const handleOpenVote = () => {
-		setOpenVote((prev:boolean) => !prev)
-	}
-	const hook = (repoName:string) => {
-		setHooked(repoName);
-	}
+	const handleVote = (lang:string) => mutate(lang); 
+	const handleOpenVote = () => setOpenVote((prev:boolean) => !prev);
+	const handleOpenLearnMore = () => setLearnMore((prev:boolean) => !prev); 
 
 	const languages = [
 		{ name:"Typescript", icon:<TsLogo /> },
@@ -119,15 +118,27 @@ export function MainPage(){
 				<div className={`eventContainer ${openVote ? "" : "close"}`}>
 					<EventBar
 						vote={vote}
-						voteCount={votes}
+						totalVotes={totalVotes}
 						handleVote={handleVote}
 						handleClose={handleOpenVote}
-						success={updateSuccess}
-						loading={updateLoading}
-						isErr={updateIsErr}
-						err={updateErr}
+						updateSuccess={updateSuccess}
+						updateLoading={updateLoading}
+						updateIsErr={updateIsErr}
+						updateErr={updateErr}
+						getLoading={getLoading}
+						getIsErr={getIsErr}
+						getErr={getErr}
 					/>
-				</div>
+				</div> 
+			)}
+			{learnMore &&(
+				<div className="learnMoreAboutContainer">
+					<About 
+						display={display}
+						setDisplay={setDisplay}
+						comps={{ Background, Hobbies, Philosophy }}
+					/>
+				</div>	
 			)}
 			<header className="header">
 				<NavBar handleOpenVote={handleOpenVote} />
@@ -176,7 +187,7 @@ export function MainPage(){
 								<span className="aboutMeStr"><strong>Self taught Software Engineer</strong></span> based in Maryland. 
 								<span className="aboutMeStr"><strong> I build full-stack applications</strong></span> by day while deepening my knowledge of computer architecture and robotics at night.
 							</p>	
-							<button className="aboutMeLearnMore" id="aboutMe">Learn More</button>
+							<button className="aboutMeLearnMore" id="aboutMe" onClick={handleOpenLearnMore}>Learn More</button>
 						</div>
 					</div>
 					<div className="primaryGridFooter">

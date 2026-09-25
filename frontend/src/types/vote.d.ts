@@ -4,7 +4,7 @@ type VOTE = {
 };
 
 type VOTE_PROPS = {
-	setVotes: React.Dispatch<React.SetStateAction<Array<VOTE>>>
+	setTotalVotes: React.Dispatch<React.SetStateAction<Array<VOTE>>>
 	setVote:any
 }
 

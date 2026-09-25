@@ -22,7 +22,7 @@ async function apiFetch(url = "", method = "GET", body?:any){
 	}
 };
 
-export function useVotes({ setVotes, setVote }:VOTE_PROPS):VOTE_METHODS{
+export function useVotes({ setTotalVotes, setVote }:VOTE_PROPS):VOTE_METHODS{
 	const queryClient = useQueryClient();
 
 	function useGet(){
@@ -32,8 +32,8 @@ export function useVotes({ setVotes, setVote }:VOTE_PROPS):VOTE_METHODS{
 		});
 
 		useEffect(() => {
-			if(data) setVotes((prev:any) => (prev.length === 0 ? data: prev))
-		}, [data, setVotes]);
+			if(data) setTotalVotes((prev:any) => (prev.length === 0 ? data : prev))
+		}, [data, setTotalVotes]);
 
 		return {
 			getLoading: isPending,

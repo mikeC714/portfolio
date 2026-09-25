@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 
-type CACHE = { voted:boolean, language:string }
-
 export function useLocalStorage(key:string = "vote", value:{ voted:boolean, language:string }){
-	const [voted, setVoted] = useState<CACHE>(() => {
+	const [voted, setVoted] = useState<() => { voted:boolean, language:string }>(() => {
 		try{
 			const cache = window.localStorage.getItem(key);
 			return cache !== null ? JSON.parse(cache) : null;
@@ -16,7 +14,7 @@ export function useLocalStorage(key:string = "vote", value:{ voted:boolean, lang
 		try{
 			window.localStorage.setItem(key, JSON.stringify(voted));
 		}catch(e){ }
-	}, [voted])
+	}, [key, voted])
 
 	return [voted, setVoted]
 }
