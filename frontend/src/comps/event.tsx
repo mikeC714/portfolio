@@ -5,11 +5,11 @@ import { WasmLogo } from "../assets/wasm.tsx"
 import { CppLogo, CLogo } from "../assets/c.tsx";
 import { voteLanguages } from "../utils/votes.tsx";
 import { X } from "lucide-react";
+import type { LANG } from "../types/vote.d.ts";
 
-type Lang = 'Rust' | 'GO' | 'Assembly' | 'Python' | 'Cpp' | 'C';
 interface PROPS{
 	vote:any;
-	totalVotes:Array<{ language:Lang, count:number }>;
+	totalVotes:Array<{ language:LANG, count:number }>;
 	handleVote: (lang:string) => void;
 	handleClose:() => void;
 	updateLoading:boolean;
@@ -22,13 +22,13 @@ interface PROPS{
 
 
 export function EventBar({ vote, totalVotes, handleVote, handleClose, updateLoading, updateIsErr, updateErr, getLoading, getIsErr, getErr }:PROPS){
-	const icons:Record<Lang, React.ReactNode> = {
+	const icons:Record<LANG, React.ReactNode> = {
 		"Rust": <RustLogo />,
 		"GO": <GoLogo />,
 		"Assembly": <WasmLogo />,
 		"Python": <PythonLogo />,
 		"Cpp": <CppLogo />,
-		"C": <CppLogo />
+		"C": <CLogo />
 	};
 	const barColors:Record<string, string> = {
 		"Rust":"#B7410E",
@@ -69,13 +69,13 @@ export function EventBar({ vote, totalVotes, handleVote, handleClose, updateLoad
 						className={`voteItem ${item.lang}`}
 						onClick={() => handleVote(item.lang)}
 					>
-						{icons[item.lang as Lang]}
+						{icons[item.lang as LANG]}
 						{item.lang}
 					</div>
 				))
 			):( 
 				<div className="totalVoteContainer">	
-					{ totalVotes.map((item:{ language:Lang, count:number }) => (
+					{ totalVotes.map((item:{ language:LANG, count:number }) => (
 						<div className="voteItem" 
 							key={item.language} 
 							style={{ backgroundColor:"green" }} 

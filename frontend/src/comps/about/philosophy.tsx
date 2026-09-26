@@ -1,5 +1,5 @@
 export function Philosophy(){
 	return(
-		<div></div>
+		<div>HELLO PHILOSOPHY</div>
 	)
 }
