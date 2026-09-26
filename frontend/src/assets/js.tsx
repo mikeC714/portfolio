@@ -5,6 +5,8 @@ import reactLogo from "./imgs/react-original.svg";
 import fastifyLogo from "./imgs/fastify-white.svg";
 import expressLogo from "./imgs/express-white-outline.svg";
 import bunLogo from "./imgs/bun-original.svg";
+import reactRouterWhiteLogo from "./imgs/react-router-white.svg"
+import tanStackLogo from "./imgs/tanstack-query.svg"
 import type {HxW} from "../types/HxW.d.ts";
 
 
@@ -15,5 +17,7 @@ const NodeLogo = ({ h, w }:HxW) => <img src={nodeLogo} height={h ?? 40} width={w
 const ReactLogo = ({ h, w }:HxW) => <img src={reactLogo} height={h ?? 40} width={w ?? 40} />;
 const BunLogo = ({ h, w }:HxW) => <img src={bunLogo} height={h ?? 40} width={w ?? 40} />;
 const ExLogo = ({ h, w }:HxW) => <img src={expressLogo} height={h ?? 40} width={w ?? 40} />;
+const ReactRouterLogo = ({ h, w }:HxW) => <img src={reactRouterWhiteLogo} height={h ?? 40} width={w ?? 40} />;
+const TanStackLogo = ({ h, w }:HxW) => <img src={tanStackLogo} height={h ?? 40} width={w ?? 40} />;
 
-export { JsLogo, TsLogo, FastifyLogo, ReactLogo, NodeLogo, BunLogo, ExLogo };
+export { JsLogo, TsLogo, FastifyLogo, ReactLogo, NodeLogo, BunLogo, ExLogo, TanStackLogo, ReactRouterLogo };

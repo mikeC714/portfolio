@@ -5,32 +5,21 @@ import { EventBar } from "../comps/event.tsx";
 import { ProjectCard } from "../comps/projects.tsx";
 import { Hobbies } from "../comps/about/hobbies.tsx";
 import { Philosophy } from "../comps/about/philosophy.tsx";
-import { About } from "../comps/about/about.tsx";
+import { About, LearnMore } from "../comps/about/about.tsx";
 import { Background } from "../comps/about/background.tsx";
 import { useVotes } from "../hooks/vote.hooks.tsx";
 import { projects } from "../utils/projects.tsx";
+import { marylandImgs } from "../utils/maryland.tsx";
+import { languages, voteLanguages } from "../utils/languages.tsx";
 import { useUnmount } from "../hooks/unmount.tsx";
 import { useLocalStorage } from "../hooks/uselocal.tsx"
-import { Fort, Bmore, Crab, Bay } from "../assets/maryland.tsx";
-import { RustLogo } from "../assets/rust.tsx";
-import { PythonLogo } from "../assets/python.tsx"
-import { GoLogo } from "../assets/golang.tsx"
-import { WasmLogo } from "../assets/wasm.tsx"
-import { CppLogo, CLogo } from "../assets/c.tsx";
-import { JsLogo, TsLogo, FastifyLogo, ReactLogo, NodeLogo } from "../assets/js.tsx";
-import { PostgresLogo, SqliteLogo } from "../assets/sql.tsx";
 import type { VOTE } from "../types/vote.d.ts";
+import type { SECTION } from "../types/about.d.ts"; 
+import type { REPO } from "../types/repo.d.ts"; 
+import type { SOCKET_DATA } from "../types/socket.d.ts"; 
 
 
-type JSON<T> = string & { readonly __brand: T };
-type REPO = {
-	repoName:string;
-	repoUrl:string;
-	langs:string | Array<string>;
-	bio:string;  
-}
-type SOCKET_DATA = JSON<REPO>;
-type Section = "Background" | "Hobbies" | "Philosophy";
+
 
 export function MainPage(){
 	const [totalVotes, setTotalVotes] = useState<VOTE[]>([]);
@@ -40,8 +29,9 @@ export function MainPage(){
 	const [hovered, setHovered] = useState<boolean>(false);
 	const [openVote, setOpenVote] = useState<boolean>(false);
 	const [hooked, setHooked] = useState<string | null>(null);
-	const [display, setDisplay] = useState<Section>("Background");
+	const [display, setDisplay] = useState<SECTION>("Background");
 	const [learnMore, setLearnMore] = useState<boolean>(false);
+	const [viewTools, setViewTools] = useState<{ view:boolean, lang:string }>({ view:false, lang:"" });
 	const { getLoading, getIsErr, getErr } = get();
 	const { mutate, updateSuccess, updateLoading, updateIsErr, updateErr } = update();
 
@@ -61,34 +51,12 @@ export function MainPage(){
 
 	const locationRender = useUnmount(hovered, 3000);
 	const voteRender = useUnmount(openVote, 500);
-	
+	const toolsRender = useUnmount(viewTools.view, 300);
+	const learnRender = useUnmount(learnMore, 300);
 	const handleVote = (lang:string) => mutate(lang); 
 	const handleOpenVote = () => setOpenVote((prev:boolean) => !prev);
 	const handleOpenLearnMore = () => setLearnMore((prev:boolean) => !prev); 
 
-	const languages = [
-		{ name:"Typescript", icon:<TsLogo /> },
-		{ name:"JavaScript ES6+", icon:<JsLogo />},
-		{ name:"React", icon:<ReactLogo />},
-		{ name:"NodeJS", icon:<NodeLogo />},
-		{ name:"Fastify", icon:<FastifyLogo />},
-		{ name:"PostgreSQL", icon:<PostgresLogo /> },
-		{ name:"SQLite",  icon:<SqliteLogo />},
-	];
-	const voteLanguages = [
-		{ name:"Rust", icon:<RustLogo /> },
-		{ name:"Python", icon:<PythonLogo /> },
-		{ name:"Go", icon:<GoLogo /> },
-		{ name:"C++", icon:<CppLogo /> },
-		{ name:"C", icon:<CLogo /> },
-		{ name:"wasm", icon:<WasmLogo /> }
-	]
-	const marylandImgs = [
-		{name:"bay", img:<Bay />}, 
-		{name:"bmore", img:<Bmore />}, 
-		{name:"crab", img:<Crab />}, 
-		{name:"fort", img:<Fort />}, 
-	];
 
 	return(
 		<div className="mainPage">
@@ -96,7 +64,7 @@ export function MainPage(){
 				<div className={`locationHoverContainer ${hovered ? "" : "fade"} `}>
 					<div className="locationHoverImgFrame">
 						<div className="locationHoverImgs">
-							{ marylandImgs.map((img:any) => (
+							{marylandImgs.map((img:any) => (
 								<div className="locationImg" key={img.name}>
 									{img.img}
 								</div>
@@ -121,7 +89,6 @@ export function MainPage(){
 						totalVotes={totalVotes}
 						handleVote={handleVote}
 						handleClose={handleOpenVote}
-						updateSuccess={updateSuccess}
 						updateLoading={updateLoading}
 						updateIsErr={updateIsErr}
 						updateErr={updateErr}
@@ -131,72 +98,53 @@ export function MainPage(){
 					/>
 				</div> 
 			)}
-			{learnMore &&(
-				<div className="learnMoreAboutContainer">
-					<About 
-						display={display}
-						setDisplay={setDisplay}
-						comps={{ Background, Hobbies, Philosophy }}
-					/>
-				</div>	
-			)}
 			<header className="header">
 				<NavBar handleOpenVote={handleOpenVote} />
 			</header>
 			<div className="mainPageBody">	
+				{learnRender && (
+						<div className={`learnMoreAboutContainer ${learnMore ? "" : "close"}`}>
+						<LearnMore 
+							display={display}
+							setDisplay={setDisplay}
+							close={setLearnMore}
+							comps={{ Background, Hobbies, Philosophy }}
+						/>
+					</div>	
+				)}
 				<div className="primaryGridContainer">
-				{
-					// <div className="fishTank">
-					// 	<div className="waves">
-					// 		<div className="waves1"></div>
-					// 		<div className="waves2"></div>
-					// 		<div className="waves3"></div>
-					// 	</div>
-					// 	<div className="water"></div>
-					// 	{projects.length > 0 ? (
-					// 		<>
-					// 			{projects.map((repo:any) => (
-					// 				<RepoFish
-					// 					repoName={repo.repoName}
-					// 					bio={repo.bio}
-					// 					langs={repo.langs}
-					// 					hook={hook}
-					// 				/>
-					// 			))};
-					// 		</>
-					// 	):
-					// 	<div className="crabContainer">
-					// 		<Crab />	
-					// 	</div>
-					// 	}
-					// 	</div>
-					}
-
-					<div className="aboutMe">
-						<header className="aboutMeHeader">
-							<h2 className="aboutMeName">Michael Carter</h2>
-							<span className="aboutMeLocation"
-								onMouseEnter={() => setHovered(true)}
-								onMouseLeave={() => setHovered(false)}
-							>
-								<a href="https://en.wikipedia.org/wiki/Maryland" target="_blank" className="locationLink">Maryland, USA</a>
-							</span>
-						</header>
-						<div className="aboutMeContent">
-							<p className="aboutMePara">
-								<span className="aboutMeStr"><strong>Self taught Software Engineer</strong></span> based in Maryland. 
-								<span className="aboutMeStr"><strong> I build full-stack applications</strong></span> by day while deepening my knowledge of computer architecture and robotics at night.
-							</p>	
-							<button className="aboutMeLearnMore" id="aboutMe" onClick={handleOpenLearnMore}>Learn More</button>
-						</div>
-					</div>
+					<About 
+						handleOpenLearnMore={handleOpenLearnMore}
+						setHovered={setHovered}
+					/>
 					<div className="primaryGridFooter">
-					{languages.map((lang:{ name:string, icon:any }) => (
-						<div className="iconContainer" key={lang.name}>
-							<div className="icon">{lang.icon}</div>
-							<span className="iconName">{lang.name}</span>
-						</div>
-					))}
+						{languages.map((lang:{ name:string, icon:any, tools?:Array<{ name:string, icon:any }>}) => { 
+							const isOpen = viewTools.view && viewTools.lang === lang.name;
+							const hasTools = toolsRender && viewTools.lang === lang.name; 
+							return(
+								<div 
+									key={lang.name} className="iconContainer"
+									onMouseEnter={lang?.tools !== undefined && lang?.tools.length > 0 ? () => setViewTools({ view:true, lang: lang.name }) : undefined}
+									onMouseLeave={lang?.tools !== undefined && lang?.tools.length > 0 ? () => setViewTools({ view:false, lang:lang.name }) : undefined}
+									style={{ cursor: lang.tools !== undefined && lang.tools?.length > 0 ? "pointer" : "auto" }}
+								>
+									{hasTools && (
+										<div className={`displayToolsContainer ${isOpen ? "" : "close"}`}>
+											<div key={lang.name} className="toolContainer">
+												{lang.tools?.map((tool: any) => (
+													<div key={tool.name} className="langTool">
+														{tool.icon}
+														<span className="langToolName">{tool.name}</span>
+													</div>
+												))}
+											</div>
+										</div>
+									)}
+									<div className="icon">{lang.icon}</div>
+									<span className="iconName">{lang.name}</span>
+								</div>
+							)}
+						)}
 					</div>
 					<div className="voteButton" onClick={handleOpenVote}>
 						<h4 className="voteHeader">Vote</h4>
@@ -214,7 +162,10 @@ export function MainPage(){
 				 </div>
 
 				<section className="projects" id="projects">
-				<h2 className="projectsHeader">projects   := </h2>		
+				<header className="projectsHeader">
+					<h2 className="projectsHeaderTitle">projects </h2>		
+					<span className="projectsHeaderSpan">:=</span>
+				</header>
 					<div className="projectsContainer">
 						{projects.map((p:any) => (
 							<ProjectCard 

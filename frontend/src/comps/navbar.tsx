@@ -1,10 +1,8 @@
+import { Mail } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub, faLinkedin, faDiscord,  } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
-type PROPS = {
-	handleOpenVote:() => void;
-};
+
+type PROPS = { handleOpenVote:() => void };
 
 export function NavBar({ handleOpenVote }:PROPS){
 	return(
@@ -20,7 +18,7 @@ export function NavBar({ handleOpenVote }:PROPS){
 			<div className="contactBar">	
 				<ul className="contactBarList">
 					<li className="contactContainer" >
-						<a target="__blank" className="emailIcon contactIcon"> <FontAwesomeIcon icon={faEnvelope as IconProp} /></a>
+						<a href={`mailto:${import.meta.env.VITE_EMAIL}`} className="emailIcon contactIcon"><Mail /></a>
 					</li>
 					<li className="contactContainer" >
 						<a href={`${import.meta.env.VITE_GITHUB}`} target="__blank" className="githubIcon contactIcon"><FontAwesomeIcon icon={faGithub}/> </a>

@@ -1,5 +1,7 @@
+
+type LANG = 'Rust' | 'GO' | 'Assembly' | 'Python' | 'Cpp' | 'C';
 type VOTE = {
-	lang:string;
+	language:Lang;
 	count:number
 };
 
@@ -23,4 +25,4 @@ type VOTE_METHODS = {
 	}
 };
 
-export { VOTE, VOTE_PROPS, VOTE_METHODS }
+export { VOTE, LANG, VOTE_PROPS, VOTE_METHODS }
