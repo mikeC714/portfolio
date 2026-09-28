@@ -1,26 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
-import type { VOTE_METHODS, VOTE_PROPS } from "./types/vote.d.ts";
-
-
-async function apiFetch(url = "", method = "GET", body?:any){
-	try{
-		return await fetch(url,{
-			method,
-			headers:{
-				"Content-Type":"application/json"
-			},
-			body: body ? JSON.stringify(body) : null,
-		}).then((res:any) => {
-			if(!res.ok){
-				throw new Error("Network Response failed");
-			};
-			return res.json()	
-		});
-	}catch(e){
-		throw e;
-	}
-};
+import { apiFetch } from "../utils/apiFetch.tsx";
+import type { VOTE_METHODS, VOTE_PROPS } from "../types/vote.d.ts";
 
 export function useVotes({ setTotalVotes, setVote }:VOTE_PROPS):VOTE_METHODS{
 	const queryClient = useQueryClient();

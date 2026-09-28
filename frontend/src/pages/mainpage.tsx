@@ -13,6 +13,7 @@ import { marylandImgs } from "../utils/maryland.tsx";
 import { languages, voteLanguages } from "../utils/languages.tsx";
 import { useUnmount } from "../hooks/unmount.tsx";
 import { useLocalStorage } from "../hooks/uselocal.tsx"
+import { useCommits } from "../hooks/commits.tsx";
 import type { VOTE } from "../types/vote.d.ts";
 import type { SECTION } from "../types/about.d.ts"; 
 import type { REPO } from "../types/repo.d.ts"; 
@@ -25,15 +26,17 @@ export function MainPage(){
 	const [totalVotes, setTotalVotes] = useState<VOTE[]>([]);
 	const [repos, setRepos] = useState<REPO[]>([]);
 	const [vote, setVote] = useLocalStorage("vote", { voted:false, language:"" })
-	const { get, update } = useVotes({ setTotalVotes, setVote });
 	const [hovered, setHovered] = useState<boolean>(false);
 	const [openVote, setOpenVote] = useState<boolean>(false);
 	const [hooked, setHooked] = useState<string | null>(null);
 	const [display, setDisplay] = useState<SECTION>("Background");
 	const [learnMore, setLearnMore] = useState<boolean>(false);
 	const [viewTools, setViewTools] = useState<{ view:boolean, lang:string }>({ view:false, lang:"" });
+	const { get, update } = useVotes({ setTotalVotes, setVote });
 	const { getLoading, getIsErr, getErr } = get();
 	const { mutate, updateSuccess, updateLoading, updateIsErr, updateErr } = update();
+	const commits = useCommits();
+
 
 	useEffect(() => {
 		socket.on("repo", (data:SOCKET_DATA) => {
@@ -56,7 +59,12 @@ export function MainPage(){
 	const handleVote = (lang:string) => mutate(lang); 
 	const handleOpenVote = () => setOpenVote((prev:boolean) => !prev);
 	const handleOpenLearnMore = () => setLearnMore((prev:boolean) => !prev); 
+	const handleOpenProject = (title:string) => { 
+		const target = projects.find((p:any) => p.repoName === title);
+		window.open(target?.link, "__blank", "noopener, noreferrer")
+	};
 
+	
 
 	return(
 		<div className="mainPage">
@@ -99,7 +107,10 @@ export function MainPage(){
 				</div> 
 			)}
 			<header className="header">
-				<NavBar handleOpenVote={handleOpenVote} />
+				<NavBar 
+					handleOpenVote={handleOpenVote} 
+					handleOpenLearnMore={handleOpenLearnMore}
+				/>
 			</header>
 			<div className="mainPageBody">	
 				{learnRender && (
@@ -167,15 +178,28 @@ export function MainPage(){
 					<span className="projectsHeaderSpan">:=</span>
 				</header>
 					<div className="projectsContainer">
-						{projects.map((p:any) => (
-							<ProjectCard 
-								img={p.img}
-								title={p.title}
-								bio={p.bio}
-								languages={p.languages}
-							/>		
-
-						))}
+						  {
+							projects.map((p:any) => {
+								    const c = commits.find((c:any) => c.project === p.repoName);
+								    const lastCommit = c?.commitData?.data[0];
+									 return (
+										<ProjectCard
+											  key={p.title}
+											  img={p.img}
+											  title={p.title}
+											  repoName={p?.repoName}
+											  bio={p.bio}
+											  languages={p.languages}
+											  link={p.link}
+											  src={p.src}
+											  commit={lastCommit}
+											  commitLoading={c?.commitLoading as boolean}
+											  commitErr={c?.commitErr as Error | null}
+											  openProject={handleOpenProject}
+										/>
+								    );
+							 })
+						  }
 					</div>
 				</section>	
 			</div>

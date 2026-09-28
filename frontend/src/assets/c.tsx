@@ -1,5 +1,5 @@
-import cppLogo from "./imgs/cplusplus-original.svg"; 
-import cLogo from "./imgs/c-original.svg";
+import cppLogo from "./imgs/c/cplusplus-original.svg"; 
+import cLogo from "./imgs/c/c-original.svg";
 import type {HxW} from "../types/HxW.d.ts";
 
 

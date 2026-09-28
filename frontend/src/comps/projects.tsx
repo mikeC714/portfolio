@@ -1,19 +1,14 @@
-import { RustLogo } from "../assets/rust.tsx";
-import { PythonLogo } from "../assets/python.tsx"
-import { GoLogo } from "../assets/golang.tsx"
-import { WasmLogo } from "../assets/wasm.tsx"
-import { CppLogo, CLogo } from "../assets/c.tsx";
 import { JsLogo, TsLogo, FastifyLogo, ReactLogo, NodeLogo, BunLogo, ExLogo } from "../assets/js.tsx";
 import { PostgresLogo, SqliteLogo } from "../assets/sql.tsx";
+import { timeAgo } from "../utils/time.tsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { GitCommitVertical, Dot } from "lucide-react";
+import type { PROJECT } from "../types/projects.d.ts";
 
-type PROPS = {
-	img:any;
-	bio:string;
-	languages:string | Array<string>;
-	title:string;
-}
 
-export function ProjectCard({img, bio, languages, title}:PROPS){
+
+export function ProjectCard({img, bio, languages, title, repoName, src, link, commit, commitLoading, commitErr, openProject}:PROJECT){
 
 	const icons:Record<string, any> = {
 		"Bun": <BunLogo h={20} w={20} />,
@@ -37,24 +32,50 @@ export function ProjectCard({img, bio, languages, title}:PROPS){
 		"React":"rgba(97, 219, 251, 1)" 
 	}
 
+	console.log("PROJECT REPO", repoName)
+
 	return(
-		<div className="projectCard">
-			<div className="projectImgContainer">{img}HELLO WORLD!</div>
+		<div className="projectCard" onClick={() => openProject(repoName)}>
+			<div className="projectCardHeader">
+				<div className="projectCardImg">{img}</div>
+				<div className="projectCardSrc">{src}</div>
+			</div>
 			<div className="projectInfoContainer">
-				<h3 className="projectCardHeader">{title}</h3>
-				<p className="projectCardBio">{bio}</p>
+				<div className="projectInfoHeader">
+					<h3 className="projectCardTitle">{title}</h3>
+				</div>
+				<div className="projectCardBio">{bio}</div>
+				<div className="projectCardLangs">
+					{Array.isArray(languages) ? 
+						languages.map((lang:string) => (
+							<div key={lang} className="projectLangCell" style={{ "--lang-color": colors[lang] } as React.CSSProperties} >
+								{lang}
+								{icons[lang]}
+							</div>
+						))
+						:
+						<div className={`projectLangCell ${languages}`}>{languages}</div>
+					}
+				</div>
+			</div>
+			<div className="projectCardCommit">
+				<span className="projectCardCommitTxt projectCardCommitIcon"><GitCommitVertical size={28} /></span>
+				<div className="projectCardAuthorNDate">
+					<p className="projectCardCommitTxt projectCardCommitMsg">{commit?.commit?.message}</p>
+					<div className="projectCardCommitMeta">
+						<p className="projectCardCommitTxt projectCardCommitId">{commit?.sha.slice(0,7)}</p>
+						<span className="projectCardCommitDot"><Dot size={20} /></span>
+						<p className="projectCardCommitTxt projectCardCommitTime">{timeAgo(commit?.commit?.committer?.date)}</p>
+					</div>
+				</div>
 			</div>
 			<footer className="projectCardFooter">
-				{Array.isArray(languages) ? 
-					languages.map((lang:string) => (
-						<div key={lang} className="projectLangCell" style={{ "--lang-color": colors[lang] } as React.CSSProperties} >
-							{lang}
-							{icons[lang]}
-						</div>
-					))
-					:
-					<div className={`projectLangCell ${languages}`}>{languages}</div>
-				}
+				<button className="projectCardLinkBtn">
+					{ src === "Open" ? 
+						<a href={link}><FontAwesomeIcon icon={faGithub} /> View Code</a> :
+						<a href={link}>View Site</a> 
+					}
+				</button>
 			</footer>
 		</div>
 	)

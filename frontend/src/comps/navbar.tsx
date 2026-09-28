@@ -1,16 +1,19 @@
 import { Mail } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faGithub, faLinkedin, faDiscord,  } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faLinkedin, faDiscord } from "@fortawesome/free-brands-svg-icons";
 
-type PROPS = { handleOpenVote:() => void };
+type PROPS = {
+	handleOpenVote:() => void;
+	handleOpenLearnMore:() => void;
+};
 
-export function NavBar({ handleOpenVote }:PROPS){
+export function NavBar({ handleOpenVote, handleOpenLearnMore }:PROPS){
 	return(
 		<div className="mainNav">
 			<nav className="mainNavListContainer">
 					<ul className="mainNavList">
 						<a href="#mainPage" className="navLink"><li className="navList">Home</li></a>
-						<a href="#about" className="navLink"><li className="navList">About</li></a>
+						<li className="navList" onClick={handleOpenLearnMore}>About</li>
 						<a href="#projects" className="navLink"><li className="navList">View Projects</li></a>
 						<li className="navList" onClick={handleOpenVote}>Vote</li>
 					</ul>
