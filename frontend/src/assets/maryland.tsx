@@ -1,7 +1,7 @@
-import fortHenry from "./imgs/Fort-McHenry.webp";
-import baltimore from "./imgs/baltimore.jpg";
-import crab from "./imgs/maryland_crab.jpg"; 
-import bay from "./imgs/chesapeake_bay.webp";
+import fortHenry from "./imgs/maryland/Fort-McHenry.webp";
+import baltimore from "./imgs/maryland/baltimore.jpg";
+import crab from "./imgs/maryland/maryland_crab.jpg"; 
+import bay from "./imgs/maryland/chesapeake_bay.webp";
 
 const Fort = () => <img src={fortHenry}  className="locationImg"/>
 const Bmore = () => <img src={baltimore} className="locationImg"/>

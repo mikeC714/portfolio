@@ -1,12 +1,12 @@
-import jsLogo from "./imgs/javascript-original.svg";
-import tsLogo from "./imgs/typescript-original.svg";
-import nodeLogo from "./imgs/node-js-brands-green.svg";
-import reactLogo from "./imgs/react-original.svg";
-import fastifyLogo from "./imgs/fastify-white.svg";
-import expressLogo from "./imgs/express-white-outline.svg";
-import bunLogo from "./imgs/bun-original.svg";
-import reactRouterWhiteLogo from "./imgs/react-router-white.svg"
-import tanStackLogo from "./imgs/tanstack-query.svg"
+import jsLogo from "./imgs/js/javascript-original.svg";
+import tsLogo from "./imgs/js/typescript-original.svg";
+import nodeLogo from "./imgs/js/node-js-brands-green.svg";
+import reactLogo from "./imgs/js/react-original.svg";
+import fastifyLogo from "./imgs/js/fastify-white.svg";
+import expressLogo from "./imgs/js/express-white-outline.svg";
+import bunLogo from "./imgs/js/bun-original.svg";
+import reactRouterWhiteLogo from "./imgs/js/react-router-white.svg"
+import tanStackLogo from "./imgs/js/tanstack-query.svg"
 import type {HxW} from "../types/HxW.d.ts";
 
 
