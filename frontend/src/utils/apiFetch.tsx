@@ -2,7 +2,6 @@ export async function apiFetch(url:string, method = "GET", body?:any | null, par
 	if(params){
 		 const queryStr = new URLSearchParams(params).toString()
 		 url = `${url}?${queryStr}`;
-		 console.log("URL WITH PARAMS", url);
 	}
 	try{
 		return await fetch(url,{

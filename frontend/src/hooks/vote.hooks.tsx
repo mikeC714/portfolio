@@ -9,11 +9,11 @@ export function useVotes({ setTotalVotes, setVote }:VOTE_PROPS):VOTE_METHODS{
 	function useGet(){
 		const { data, isPending, isError, error } = useQuery({
 			queryKey:["votes"],
-			queryFn: async() => await apiFetch(`${import.meta.env.VITE_API}/votes-get`),
+			queryFn: async() => await apiFetch(`${import.meta.env.VITE_API}/api/votes-get`),
 		});
-
+		
 		useEffect(() => {
-			if(data) setTotalVotes((prev:any) => (prev.length === 0 ? data : prev))
+			if(data?.votes) setTotalVotes((prev:any) => (prev.length === 0 ? data?.votes : prev))
 		}, [data, setTotalVotes]);
 
 		return {
@@ -25,13 +25,15 @@ export function useVotes({ setTotalVotes, setVote }:VOTE_PROPS):VOTE_METHODS{
 
 	function useUpdate(){
 		const { mutate, isPending, isSuccess, isError, error } = useMutation({
-			mutationFn: async(body) => await apiFetch(`${import.meta.env.VITE_API}/votes`, "PUT", body),
+			mutationFn: async(body) => await apiFetch(`${import.meta.env.VITE_API}/api/vote`, "PUT", { vote: body }),
 			onSuccess: (_, body) => {
 				setVote({ voted:true, language:body })
 				queryClient.invalidateQueries({ queryKey:["votes"] })				
 			},
-			onError: () => {
-				throw new Error(`Network Response Failed.`);
+			onError: (e:any) => {
+				console.error(e);
+				console.error(error);
+				console.error(`Network Response Failed.`, error);
 			}
 		});
 		return {

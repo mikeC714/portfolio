@@ -8,20 +8,19 @@ export class GithubControllers{
 		this.service = service;
 	}
 
-	receive = async(req:Request,res:Response) => {
-		const header = req.header("x-github-event")
-		if(!header){
-			return res.status(401).send("Failed to send valid headers.");
+	commit = async(req:Request, res:Response) => {
+		const query = req.query?.repo;	
+		if(!query){
+			return res.status(400).json({ msg: `Github Error. Failed to provied query.`}); 
 		}
-		if(!this.service.verifyEvent(header)){
-			return res.status(401).send("Failed to verify webhook event.");
-		}		
 		try{
-			await this.service.parse(req);
-			return res.status(200).send("Received Webhook Data!");
+			const resp = await this.service.req(query as string);
+			return res.status(200).json({
+				success:true,
+				data:resp
+			});
 		}catch(e:any){
-			throw new Error(e)
-		};
-				
+			throw e;
+		}
 	}
 }

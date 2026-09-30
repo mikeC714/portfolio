@@ -7,7 +7,7 @@ export function useCommits(){
 	const res = useQueries({
 		queries: PROJECTS.map((p) => ({
 			queryKey:["commits", p],
-			queryFn: () =>  apiFetch(`${import.meta.env.VITE_API}/commits`, "GET", null, { repo: p }),
+			queryFn: () =>  apiFetch(`${import.meta.env.VITE_API}/api/commits`, "GET", null, { repo: p }),
 			staleTime:60 * 60 * 24 * 1000,
 		})),
 	})

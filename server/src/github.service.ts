@@ -1,38 +1,30 @@
 export class GithubService{
-	private socket:any;
-	constructor(socket:any){
-		this.socket = socket;
-	}
-	
-	verifyEvent = (headers:string) => {
-		if(!headers) return false; 
+	req = async(repo:string) => {
+		if(!repo) throw new Error("Github repo is undefined");
 
-		//decrypt
+		const owner = process.env.GITHUB;
+		const token = process.env.GITHUB_TOKEN;
 			
-		//verify match
-		if(headers !== process.env.GITHUB_SECRET) return false;
+		try{
+			const res = await fetch(`https://api.github.com/repos/${owner}/${encodeURIComponent(repo)}/commits`,{
+				headers:{
+					Authorization:`Bearer ${token}`,
+					Accept: "application/vnd.github+json",
+						"X-GitHub-Api-Version": "2022-11-28",
+				},
+			});
 
-		return true;
-	};	
+			 if (!res.ok) {
+			    const body = await res.json().catch(() => null);
+			    throw new Error(`GitHub ${res.status}: ${body?.message ?? res.statusText}`);
+			  }
 
-	parse = async(req:Request | any) => {
-		let payload = {};
-		const eventType = req.headers("x-github-event");
 
-		if(eventType === "push"){
-			let body = req.body;
+			return res.json();
+		}catch(e:any){
+			throw e;
+		}
 
-			if(body.repository.private) return;
-			
-			payload = {
-				 repoName: body.repository.full_name,
-				 repoUrl: body.repository.head_commit?.url,
-				 langs: body.repository.language,
-				 bio: body.repository.description
-			};
-		};
-		
-		this.socket.emit("repo", JSON.stringify(payload));
-	}
+	} 
 }
 

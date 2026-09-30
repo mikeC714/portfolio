@@ -1,5 +1,4 @@
-import { hobbies } from "../../utils/hobbies.tsx";
-
+import { hobbies } from "../../../utils/hobbies.tsx";
 
 export function Hobbies(){
 	return(

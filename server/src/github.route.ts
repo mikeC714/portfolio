@@ -1,11 +1,9 @@
 import { Router } from "express";
 import { GithubService } from "./github.service.ts";
 import { GithubControllers } from "./github.controller.ts";
-import { io } from "./server.ts";
 
-
-export const router = Router();
-const service = new GithubService(io);
+export const githubRouter = Router();
+const service = new GithubService();
 const controller = new GithubControllers(service);
 
-router.post("/webhook", controller.receive);
+githubRouter.get("/api/commits", controller.commit);

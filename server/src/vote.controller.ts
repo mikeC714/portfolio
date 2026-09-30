@@ -12,16 +12,18 @@ export class VoteController{
 	getVotes = async(req:Request, res:Response) => {
 		try{
 			const queryRes = await this.service.getVotes();
-			return res.status(200).json({ success:true, queryRes })
+			return res.status(200).json({ success:true, votes:queryRes })
 		}catch(e){
 			throw e;
 		}
 	}
 
 	updateVote = async(req:Request<{ ReqBody:VOTE_INPUT }>, res:Response) => {
+		let { vote } = req.body;
+		console.log("Vote input",vote)
 		try{
-			const queryRes = await this.service.inputVote(req.body);
-			return res.status(200).json({ sucess:true, queryRes })
+			await this.service.inputVote(vote);
+			return res.status(200).json({ success:true, vote });
 		}catch(e){
 			throw e;
 		}
