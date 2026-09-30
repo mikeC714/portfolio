@@ -1,6 +1,6 @@
-import { RustLogo } from "../assets/rust.tsx";
+import { RustLogo,RustCrab } from "../assets/rust.tsx";
 import { PythonLogo } from "../assets/python.tsx"
-import { GoLogo } from "../assets/golang.tsx"
+import { GoLogo, GoGif } from "../assets/golang.tsx"
 import { WasmLogo } from "../assets/wasm.tsx"
 import { CppLogo, CLogo } from "../assets/c.tsx";
 import { voteLanguages } from "../utils/votes.tsx";
@@ -40,6 +40,10 @@ export function EventBar({ openVote, vote, totalVotes, handleVote, handleClose, 
 		"cpp": "#659AD2",
 		"c":"#659AD2" 
 	}
+	const gifs:Record<string, React.ReactNode> = {
+		"go": <GoGif />,
+		"rust":<RustCrab />
+	} 
 
 	console.log(totalVotes)
 
@@ -81,15 +85,18 @@ export function EventBar({ openVote, vote, totalVotes, handleVote, handleClose, 
 				):( 
 					<div className="totalVoteContainer">	
 						{ totalVotes?.map((item:any) => (
-							<div className="voteBar" 
-								key={item.lang} 
-								style={{ 
-									width: item.count > 0 ? `(${item?.count} * 2) %` : "1%",
-									backgroundColor: vote.lang === item.lang ? "green" : barColors[item.lang] 
-								}} 
-							>
-								<div className="voteCount">{item.count}</div>
-								<span className="voteItemIcon"></span>
+							<div className="voteBar" key={item.lang} >
+								<div 
+									className="voteBarContent" 
+									style={{width: item.count > 0 ? `(${item?.count} * 2)%` : "1%"}}
+								>
+									{item.lang === vote.language && (
+										<div className="voteGif">{gifs[item.lang]}</div>
+									)}
+									<div className="voteBar" style={{ backgroundColor: vote.lang === item.lang ? "green" : barColors[item.lang] }}>
+										<div className="voteCount" style={{color: item.lang === vote.language ? "#83f28f" : "#FFFFFF"}}>{item.count}</div>
+									</div>
+								</div>
 							</div>	
 						))}
 					</div>

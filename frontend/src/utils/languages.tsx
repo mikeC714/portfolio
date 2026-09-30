@@ -25,7 +25,7 @@ const languages = [
 		]
 	},
 	{
-		name:"NodeJS",
+		name:"NodeJs",
 		icon:<NodeLogo />,
 		tools:[
 			{ name:"Fastify", icon:<FastifyLogo  h={30} w={30}/>},

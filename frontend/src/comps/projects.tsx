@@ -14,6 +14,7 @@ export function ProjectCard({img, bio, languages, title, repoName, src, link, co
 		"Bun": <BunLogo h={20} w={20} />,
 		"TypeScript": <TsLogo h={20} w={20} />,
 		"Express": <ExLogo h={20} w={20} />,
+		"NodeJs":<NodeLogo h={20}  w={20} />,
 		"Fastify": <FastifyLogo h={20} w={20} />,
 		"SQLite": <SqliteLogo h={20} w={20} />,
 		"PostgreSQL": <PostgresLogo h={20} w={20} />,
@@ -24,6 +25,7 @@ export function ProjectCard({img, bio, languages, title, repoName, src, link, co
 	const colors:Record<string, string> = {
 		"Bun":"rgba(251, 240, 223, 1)" ,
 		"TypeScript":"rgba(49, 120, 198, 1)", 
+		"NodeJs":"rgba(60, 135, 58, 1)", 
 		"Express":"rgba(255, 255, 255, 1)" ,
 		"Fastify":"rgba(0, 0, 0, 1)" ,
 		"SQLite": "rgba(125, 212, 245, 1)",
@@ -34,8 +36,8 @@ export function ProjectCard({img, bio, languages, title, repoName, src, link, co
 
 
 	return(
-		<div className="projectCard" onClick={() => openProject(repoName)}>
-			<div className="projectCardHeader">
+		<div className="projectCard">
+			<div className="projectCardHeader"  onClick={() => openProject(repoName)}>
 				<div className="projectCardImg">{img}</div>
 				<div className="projectCardSrc">{src}</div>
 			</div>

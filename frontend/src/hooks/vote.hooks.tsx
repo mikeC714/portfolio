@@ -27,8 +27,8 @@ export function useVotes({ setTotalVotes, setVote }:VOTE_PROPS):VOTE_METHODS{
 		const { mutate, isPending, isSuccess, isError, error } = useMutation({
 			mutationFn: async(body) => await apiFetch(`${import.meta.env.VITE_API}/api/vote`, "PUT", { vote: body }),
 			onSuccess: (_, body) => {
-				setVote({ voted:true, language:body })
 				queryClient.invalidateQueries({ queryKey:["votes"] })				
+				setVote({ voted:true, language:body })
 			},
 			onError: (e:any) => {
 				console.error(e);
