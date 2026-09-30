@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import { socket } from "../config.tsx";
+import { useState } from "react";
 import { NavBar } from "../comps/navbar.tsx";
 import { EventBar } from "../comps/event.tsx";
 import { ProjectCard } from "../comps/projects.tsx";
-import { Hobbies } from "../comps/about/hobbies.tsx";
-import { Philosophy } from "../comps/about/philosophy.tsx";
-import { About, LearnMore } from "../comps/about/about.tsx";
-import { Background } from "../comps/about/background.tsx";
+import { About } from "../comps/about/about.tsx";
+import { LearnMore } from "../comps/about/learnMore.tsx";
+import { Background } from "../comps/about/comps/background.tsx";
+import { Hobbies } from "../comps/about/comps/hobbies.tsx";
+import { Philosophy } from "../comps/about/comps/philosophy.tsx";
+import { Location } from "../comps/about/location.tsx";
 import { useVotes } from "../hooks/vote.hooks.tsx";
 import { projects } from "../utils/projects.tsx";
 import { marylandImgs } from "../utils/maryland.tsx";
@@ -16,19 +17,13 @@ import { useLocalStorage } from "../hooks/uselocal.tsx"
 import { useCommits } from "../hooks/commits.tsx";
 import type { VOTE } from "../types/vote.d.ts";
 import type { SECTION } from "../types/about.d.ts"; 
-import type { REPO } from "../types/repo.d.ts"; 
-import type { SOCKET_DATA } from "../types/socket.d.ts"; 
-
-
 
 
 export function MainPage(){
-	const [totalVotes, setTotalVotes] = useState<VOTE[]>([]);
-	const [repos, setRepos] = useState<REPO[]>([]);
+	const [totalVotes, setTotalVotes] = useState<Array<VOTE>>([]);
 	const [vote, setVote] = useLocalStorage("vote", { voted:false, language:"" })
 	const [hovered, setHovered] = useState<boolean>(false);
 	const [openVote, setOpenVote] = useState<boolean>(false);
-	const [hooked, setHooked] = useState<string | null>(null);
 	const [display, setDisplay] = useState<SECTION>("Background");
 	const [learnMore, setLearnMore] = useState<boolean>(false);
 	const [viewTools, setViewTools] = useState<{ view:boolean, lang:string }>({ view:false, lang:"" });
@@ -37,20 +32,6 @@ export function MainPage(){
 	const { mutate, updateSuccess, updateLoading, updateIsErr, updateErr } = update();
 	const commits = useCommits();
 
-
-	useEffect(() => {
-		socket.on("repo", (data:SOCKET_DATA) => {
-			try{
-				let parsed = JSON.parse(data);
-				setRepos([...repos, parsed]);
-			}catch(e){
-				throw e;
-			}	
-		})
-		return () => {
-			socket.off("repo");
-		};
-	},[]);
 
 	const locationRender = useUnmount(hovered, 3000);
 	const voteRender = useUnmount(openVote, 500);
@@ -65,46 +46,29 @@ export function MainPage(){
 	};
 
 	
-
 	return(
 		<div className="mainPage">
 			{locationRender && (
-				<div className={`locationHoverContainer ${hovered ? "" : "fade"} `}>
-					<div className="locationHoverImgFrame">
-						<div className="locationHoverImgs">
-							{marylandImgs.map((img:any) => (
-								<div className="locationImg" key={img.name}>
-									{img.img}
-								</div>
-							)) }
-						</div>		
-					</div>
-					<div className="locationHoverLine"></div>
-					<div className="locationHoverInfoContainer">
-						<p className="locationInfo"> 
-							Maryland is a small Mid-Atlantic state famous for the Chesapeake Bay, blue crabs and Old Bay seasoning tying to its long maritime history.
-							It was one of the original thirteen colonies, 
-							founded in 1634 as a haven for English Catholics, 
-							and it's where Francis Scott Key wrote "The Star-Spangled Banner" after watching the defense of Fort McHenry in Baltimore during the War of 1812.
-						</p>
-					</div>
-				</div>
+				<Location
+					hovered={hovered}
+					marylandImgs={marylandImgs}
+				/>
 			)}	
 			{voteRender &&(
-				<div className={`eventContainer ${openVote ? "" : "close"}`}>
-					<EventBar
-						vote={vote}
-						totalVotes={totalVotes}
-						handleVote={handleVote}
-						handleClose={handleOpenVote}
-						updateLoading={updateLoading}
-						updateIsErr={updateIsErr}
-						updateErr={updateErr}
-						getLoading={getLoading}
-						getIsErr={getIsErr}
-						getErr={getErr}
-					/>
-				</div> 
+				<EventBar
+					openVote={openVote}
+					vote={vote}
+					totalVotes={totalVotes}
+					handleVote={handleVote}
+					handleClose={handleOpenVote}
+					updateSuccess={updateSuccess}
+					updateLoading={updateLoading}
+					updateIsErr={updateIsErr}
+					updateErr={updateErr}
+					getLoading={getLoading}
+					getIsErr={getIsErr}
+					getErr={getErr}
+				/>
 			)}
 			<header className="header">
 				<NavBar 
@@ -114,14 +78,13 @@ export function MainPage(){
 			</header>
 			<div className="mainPageBody">	
 				{learnRender && (
-						<div className={`learnMoreAboutContainer ${learnMore ? "" : "close"}`}>
-						<LearnMore 
-							display={display}
-							setDisplay={setDisplay}
-							close={setLearnMore}
-							comps={{ Background, Hobbies, Philosophy }}
-						/>
-					</div>	
+					<LearnMore 
+						openLearnMore={learnMore}
+						display={display}
+						setDisplay={setDisplay}
+						close={setLearnMore}
+						comps={{ Background, Hobbies, Philosophy }}
+					/>
 				)}
 				<div className="primaryGridContainer">
 					<About 

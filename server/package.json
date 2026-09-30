@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --env-file=.env --test",
+    "start": "node server.js",
+    "dev": "node --watch --env-file=.env ./src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,8 +19,10 @@
     "typescript": "^7.0.2"
   },
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "helmet": "^8.3.0",
     "ioredis": "^5.11.1",
     "pg": "^8.22.0",
     "socket.io": "^4.8.3"

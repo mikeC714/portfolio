@@ -9,33 +9,26 @@ export class VoteService{
 
 	getVotes = async():Promise<VOTES> => {
 		try{
-			const query = await this.db.query<VOTE_ROW>(`SELECT name, count FROM languages`)
+			const query = await this.db.query<VOTE_ROW>(`SELECT lang, count FROM votes`)
 			return query.rows;
 		}catch(e:any){
 			throw new Error(`Failed to query votes`, e);
 		}
 	}
 
-	inputVote = async(input:VOTE_INPUT):Promise<VOTE_ROW | undefined> => {
+	inputVote = async(input:VOTE_INPUT):Promise<Array<VOTE_ROW> | undefined> => {
 		if(!input) return;	
+		console.log("INPUT FOR VOTE", input)
+		console.log("TYPE INPUT FOR VOTE", typeof(input))
 		try{
-			const query = await this.db.query<VOTE_ROW>(`
-						  	WITH upsert AS(
-								INSERT INTO languages(lang, count)
-									VALUES($1, 1)
-									ON CONFLICT(lang)
-									DO UPDATE SET count = lang.count + 1
-								RETURNING lang, count
-							)
-							SELECT name, count FROM upsert
-							UNION ALL
-							SELECT name, count FROM languages WHERE name NOT IN (SELECT name FROM upsert)
-							ORDER BY name
-						  `, [input.language]
-						);
-			return query.rows;
+			await this.db.query<VOTE_ROW>(`
+								  UPDATE votes 
+									SET count = count + 1
+									WHERE lang = $1
+								  `, [input]
+								);
 		}catch(e:any){
-			throw new Error(`Invalid input`, e);
+			throw new Error(`Invalid input:${e.message}`, e);
 		}
 	}
 }

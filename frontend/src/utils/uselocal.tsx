@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import type { LANG } from "../types/vote.d.ts";
 
-export function useLocalStorage(key:string = "vote", value:{ voted:boolean, language:string }){
+
+export function useLocalStorage(key:string = "vote", value:{ voted:boolean, language:LANG }){
 	const [voted, setVoted] = useState<() => { voted:boolean, language:string }>(() => {
 		try{
 			const cache = window.localStorage.getItem(key);

@@ -1,7 +1,7 @@
 
-type LANG = 'Rust' | 'GO' | 'Assembly' | 'Python' | 'Cpp' | 'C';
+type LANG = 'rust' | 'go' | 'assembly' | 'python' | 'cpp' | 'c';
 type VOTE = {
-	language:Lang;
+	lang:Lang;
 	count:number
 };
 

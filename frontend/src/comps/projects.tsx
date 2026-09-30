@@ -32,7 +32,6 @@ export function ProjectCard({img, bio, languages, title, repoName, src, link, co
 		"React":"rgba(97, 219, 251, 1)" 
 	}
 
-	console.log("PROJECT REPO", repoName)
 
 	return(
 		<div className="projectCard" onClick={() => openProject(repoName)}>
@@ -63,7 +62,7 @@ export function ProjectCard({img, bio, languages, title, repoName, src, link, co
 				<div className="projectCardAuthorNDate">
 					<p className="projectCardCommitTxt projectCardCommitMsg">{commit?.commit?.message}</p>
 					<div className="projectCardCommitMeta">
-						<p className="projectCardCommitTxt projectCardCommitId">{commit?.sha.slice(0,7)}</p>
+						<p className="projectCardCommitTxt projectCardCommitId">#{commit?.sha.slice(0,7)}</p>
 						<span className="projectCardCommitDot"><Dot size={20} /></span>
 						<p className="projectCardCommitTxt projectCardCommitTime">{timeAgo(commit?.commit?.committer?.date)}</p>
 					</div>
