@@ -56,10 +56,9 @@
 	align-self:flex-start;
 	padding:10px;
 	border-radius:22px;
-	cursor:pointer;
 	transition:border-color .2s ease;
 }
-.projectCard:hover{
+.projectCard:has(.projectCardHeader:hover){
 	border-color: rgba(255,255,255,.6);
 }
 
@@ -70,6 +69,7 @@
 	justify-content:center;
 	align-items:center;
 	position:relative;
+	cursor:pointer;
 }
 .projectCardImg{
 	width:fit-content;
