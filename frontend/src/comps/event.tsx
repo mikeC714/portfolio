@@ -5,12 +5,12 @@ import { WasmLogo } from "../assets/wasm.tsx"
 import { CppLogo, CLogo } from "../assets/c.tsx";
 import { voteLanguages } from "../utils/votes.tsx";
 import { X } from "lucide-react";
-import type { LANG, VOTE } from "../types/vote.d.ts";
+import type { VOTE } from "../types/vote.d.ts";
 
 interface PROPS{
 	openVote:boolean;
 	vote:any;
-	totalVotes:Array<{ language:LANG, count:number }>;
+	totalVotes:Array<VOTE>;
 	handleVote: (lang:string) => void;
 	handleClose:() => void;
 	updateSuccess:boolean;
@@ -70,7 +70,7 @@ export function EventBar({ openVote, vote, totalVotes, handleVote, handleClose, 
 						<div>{getErr?.message}</div>
 					)	
 				}
-				<h3 className="voteHeader">What would you suggest to learn next?</h3>
+				<h3 className="voteHeader">{ vote === null ? "What would you suggest to learn next?" :  "Total Votes" }</h3>
 				{ vote === null || vote.language === "" ? (
 					voteLanguages.map(item => (
 						<div 
@@ -88,13 +88,23 @@ export function EventBar({ openVote, vote, totalVotes, handleVote, handleClose, 
 							<div className="voteBar" key={item.lang} >
 								<div 
 									className="voteBarContent" 
-									style={{width: item.count > 0 ? `(${item?.count} * 2)%` : "1%"}}
+									style={{}}
 								>
 									{item.lang === vote.language && (
-										<div className="voteGif">{gifs[item.lang]}</div>
+										<div className="voteGifContainer">
+											<div className="voteGif">{gifs[item.lang]}</div>
+										</div>
 									)}
-									<div className="voteBar" style={{ backgroundColor: vote.lang === item.lang ? "green" : barColors[item.lang] }}>
-										<div className="voteCount" style={{color: item.lang === vote.language ? "#83f28f" : "#FFFFFF"}}>{item.count}</div>
+									<div 
+										className="voteBarFill" 
+										style={{ width: item.count > 0 ? `${Math.min(item?.count * 2, 100)}%` : "0%", backgroundColor:barColors[item.lang] }}
+									>
+										<div 
+											className="voteCount"
+											style={{ color: item.lang === vote.language ? "#ACD8A7" : "#212222"}}
+										>
+											{item.count}
+										</div>
 									</div>
 								</div>
 							</div>	

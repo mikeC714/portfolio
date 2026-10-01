@@ -14,7 +14,7 @@ export function useVotes({ setTotalVotes, setVote }:VOTE_PROPS):VOTE_METHODS{
 		
 		useEffect(() => {
 			if(data?.votes) setTotalVotes((prev:any) => (prev.length === 0 ? data?.votes : prev))
-		}, [data, setTotalVotes]);
+		}, [data, setTotalVotes, isPending]);
 
 		return {
 			getLoading: isPending,
@@ -26,9 +26,9 @@ export function useVotes({ setTotalVotes, setVote }:VOTE_PROPS):VOTE_METHODS{
 	function useUpdate(){
 		const { mutate, isPending, isSuccess, isError, error } = useMutation({
 			mutationFn: async(body) => await apiFetch(`${import.meta.env.VITE_API}/api/vote`, "PUT", { vote: body }),
-			onSuccess: (_, body) => {
-				queryClient.invalidateQueries({ queryKey:["votes"] })				
+			onSuccess: async(_, body) => {
 				setVote({ voted:true, language:body })
+				 return await queryClient.resetQueries({ queryKey:["votes"] })				
 			},
 			onError: (e:any) => {
 				console.error(e);
