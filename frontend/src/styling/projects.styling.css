@@ -76,17 +76,43 @@
 	display:flex;
 	justify-content:center;
 }
-.projectCardSrc{
+.projectCardStatusNSrc{
 	position:absolute;
 	right:10px;
 	top:10px;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	gap:8px;
+}
+.projectStatusIcon{
+	display:flex;
+	justify-content:center;
+	align-items:center;
+}
+.hammer{
+	transform:scaleX(-1);	
+	animation:hammer-swing 2s infinite;
+}
+@keyframes hammer-swing {
+  0%   { transform: rotate(0deg);   animation-timing-function: ease-out; }
+  35%  { transform: rotate(-40deg); animation-timing-function: cubic-bezier(.6, 0, 1, .6); }
+  52%  { transform: rotate(20deg);  animation-timing-function: ease-out; }
+  60%  { transform: rotate(18deg);  animation-timing-function: ease-in; }
+  67%  { transform: rotate(17deg);  animation-timing-function: ease-in-out; }
+  100% { transform: rotate(2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hammer-swing { animation: none; }
+}
+.projectSrc{
 	padding:2px 14px 2px 14px;
 	background:rgba(255,255,255,.4);
 	backdrop-filter:blur(12px);
 	-webkit-backdrop-filter:blur(12px);
 	border:1px solid rgba(255,255,255, .40);
 	border-radius:8px;
-	
 }
 .projectInfoContainer{
 	grid-row:2;

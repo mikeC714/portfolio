@@ -36,12 +36,12 @@ const languages = [
 	{ name:"SQLite",  icon:<SqliteLogo />},
 ];
 const voteLanguages = [
-	{ lang:"rust", icon:<RustLogo /> },
 	{ lang:"python", icon:<PythonLogo /> },
-	{ lang:"go", icon:<GoLogo /> },
-	{ lang:"cpp", icon:<CppLogo /> },
 	{ lang:"c", icon:<CLogo /> },
-	{ lang:"assembly", icon:<WasmLogo /> }
+	{ lang:"assembly", icon:<WasmLogo /> },
+	{ lang:"cpp", icon:<CppLogo /> },
+	{ lang:"rust", icon:<RustLogo /> },
+	{ lang:"go", icon:<GoLogo /> },
 ]
 
 export { voteLanguages, languages };
