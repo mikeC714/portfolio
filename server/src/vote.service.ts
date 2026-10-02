@@ -18,8 +18,6 @@ export class VoteService{
 
 	inputVote = async(input:VOTE_INPUT):Promise<Array<VOTE_ROW> | undefined> => {
 		if(!input) return;	
-		console.log("INPUT FOR VOTE", input)
-		console.log("TYPE INPUT FOR VOTE", typeof(input))
 		try{
 			await this.db.query<VOTE_ROW>(`
 								  UPDATE votes 

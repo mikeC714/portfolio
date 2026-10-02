@@ -10,6 +10,7 @@ export class GithubControllers{
 
 	commit = async(req:Request, res:Response) => {
 		const query = req.query?.repo;	
+		console.log("QUERY FROM COMMIT",query);
 		if(!query){
 			return res.status(400).json({ msg: `Github Error. Failed to provied query.`}); 
 		}

@@ -3,12 +3,12 @@ import { PostgresLogo, SqliteLogo } from "../assets/sql.tsx";
 import { timeAgo } from "../utils/time.tsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { GitCommitVertical, Dot } from "lucide-react";
+import { GitCommitVertical, Dot, FaceSlightlyFrowning, Hammer } from "lucide-react";
 import type { PROJECT } from "../types/projects.d.ts";
 
 
 
-export function ProjectCard({img, bio, languages, title, repoName, src, link, commit, commitLoading, commitErr, openProject}:PROJECT){
+export function ProjectCard({img, status, bio, languages, title, repoName, src, link, commit, commitLoading, commitErr, openProject}:PROJECT){
 
 	const icons:Record<string, any> = {
 		"Bun": <BunLogo h={20} w={20} />,
@@ -34,12 +34,27 @@ export function ProjectCard({img, bio, languages, title, repoName, src, link, co
 		"React":"rgba(97, 219, 251, 1)" 
 	}
 
+	const statusIcon:Record<string, React.ReactNode> = {
+		"pending": <Hammer />,
+		"down":<FaceSlightlyFrowning />
+	}
+
+	console.log(status)
+
 
 	return(
 		<div className="projectCard">
 			<div className="projectCardHeader"  onClick={() => openProject(repoName)}>
 				<div className="projectCardImg">{img}</div>
-				<div className="projectCardSrc">{src}</div>
+				<div className="projectCardStatusNSrc">
+					<div
+						title={status === "pending" ? "In Progress" : "Currently Down"} 
+						className={`projectStatusIcon ${status === "pending" ? "hammer" : "frown"}`}
+					>
+						{statusIcon[status]}
+					</div>
+					<div className="projectSrc">{src}</div>
+				</div>
 			</div>
 			<div className="projectInfoContainer">
 				<div className="projectInfoHeader">

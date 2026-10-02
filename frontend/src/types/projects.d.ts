@@ -1,6 +1,9 @@
+type STATUS = "good" | "down" | "pending" ;
+
 export type PROJECT = {
 	img:any;
 	bio:string;
+	status:STATUS;
 	languages:string | Array<string>;
 	title:string;
 	repoName:string;

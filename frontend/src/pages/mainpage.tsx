@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import { NavBar } from "../comps/navbar.tsx";
 import { EventBar } from "../comps/event.tsx";
 import { ProjectCard } from "../comps/projects.tsx";
@@ -31,6 +32,7 @@ export function MainPage(){
 	const { getLoading, getIsErr, getErr } = get();
 	const { mutate, updateSuccess, updateLoading, updateIsErr, updateErr } = update();
 	const commits = useCommits();
+
 
 
 	const locationRender = useUnmount(hovered, 3000);
@@ -149,6 +151,7 @@ export function MainPage(){
 										<ProjectCard
 											  key={p.title}
 											  img={p.img}
+											  status={p.status}
 											  title={p.title}
 											  repoName={p?.repoName}
 											  bio={p.bio}
