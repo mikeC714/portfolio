@@ -12,7 +12,7 @@ export function NavBar({ handleOpenVote, handleOpenLearnMore }:PROPS){
 		<div className="mainNav">
 			<nav className="mainNavListContainer">
 					<ul className="mainNavList">
-						<a href="#mainPage" className="navLink"><li className="navList">Home</li></a>
+						<a href="/" className="navLink"><li className="navList">Home</li></a>
 						<li className="navList" onClick={handleOpenLearnMore}>About</li>
 						<a href="#projects" className="navLink"><li className="navList">View Projects</li></a>
 						<li className="navList" onClick={handleOpenVote}>Vote</li>
