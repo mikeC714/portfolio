@@ -3,7 +3,7 @@ import { PostgresLogo, SqliteLogo } from "../assets/sql.tsx";
 import { timeAgo } from "../utils/time.tsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import { GitCommitVertical, Dot, FaceSlightlyFrowning, Hammer } from "lucide-react";
+import { GitCommitVertical, Dot, FaceSlightlyFrowning, Hammer, Brain } from "lucide-react";
 import type { PROJECT } from "../types/projects.d.ts";
 
 
@@ -36,11 +36,9 @@ export function ProjectCard({img, status, bio, languages, title, repoName, src, 
 
 	const statusIcon:Record<string, React.ReactNode> = {
 		"pending": <Hammer />,
-		"down":<FaceSlightlyFrowning />
+		"down":<FaceSlightlyFrowning />,
+		"brainStorming":<Brain />
 	}
-
-	console.log(status)
-
 
 	return(
 		<div className="projectCard">
@@ -48,8 +46,20 @@ export function ProjectCard({img, status, bio, languages, title, repoName, src, 
 				<div className="projectCardImg">{img}</div>
 				<div className="projectCardStatusNSrc">
 					<div
-						title={status === "pending" ? "In Progress" : "Currently Down"} 
-						className={`projectStatusIcon ${status === "pending" ? "hammer" : "frown"}`}
+						title={(() => {
+							switch(status){
+								case "pending": return "In Progress";
+								case "brainStorming": return "In Thought"; 
+								case "down": return "Currently Down"; 
+							}	
+						})()} 
+						className={`projectStatusIcon ${(() => {
+							switch(status){
+								case "pending": return "hammer";
+								case "brainStorming": return "brain"; 
+								case "down": return "frown"; 
+							}	
+						})()}`}
 					>
 						{statusIcon[status]}
 					</div>

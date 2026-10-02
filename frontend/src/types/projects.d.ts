@@ -1,4 +1,4 @@
-type STATUS = "good" | "down" | "pending" ;
+type STATUS = "good" | "brainStorming" |"down" | "pending" ;
 
 export type PROJECT = {
 	img:any;

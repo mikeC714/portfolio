@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useState } from "react";
 import { NavBar } from "../comps/navbar.tsx";
 import { EventBar } from "../comps/event.tsx";
 import { ProjectCard } from "../comps/projects.tsx";

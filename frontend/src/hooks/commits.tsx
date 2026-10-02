@@ -1,8 +1,8 @@
 import { useQueries } from "@tanstack/react-query";
 import { apiFetch } from "../utils/apiFetch.tsx";
 
-const PROJECTS = ["logger", "field-hq", "machine2pi"] as const;
 
+const PROJECTS = ["logger", "field-hq", "machine2pi", "spider"] as const;
 export function useCommits(){
 	const res = useQueries({
 		queries: PROJECTS.map((p) => ({
