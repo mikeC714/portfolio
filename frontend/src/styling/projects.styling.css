@@ -43,7 +43,7 @@
 	flex-wrap:wrap;
 }
 .projectCard{
-	min-height:40em;
+	min-height:764px;
 	height:auto;
 	max-width:28em;
 	border:1px solid rgba(255,255,255,.2);
@@ -106,6 +106,22 @@
 @media (prefers-reduced-motion: reduce) {
   .hammer-swing { animation: none; }
 }
+.brain {
+  animation: brain-shake 2.4s infinite;
+}
+
+@keyframes brain-shake {
+  0%, 45%, 100% { transform: translate(0, 0) rotate(0deg); }
+  5%  { transform: translate(-2px, 1px) rotate(-3deg); }
+  10% { transform: translate(2px, -1px) rotate(3deg); }
+  15% { transform: translate(-2px, -1px) rotate(-2deg); }
+  20% { transform: translate(2px, 1px) rotate(2deg); }
+  25% { transform: translate(-1px, 1px) rotate(-3deg); }
+  30% { transform: translate(1px, -1px) rotate(3deg); }
+  35% { transform: translate(-1px, 0) rotate(-1deg); }
+  40% { transform: translate(1px, 0) rotate(1deg); }
+}
+
 .projectSrc{
 	padding:2px 14px 2px 14px;
 	background:rgba(255,255,255,.4);
