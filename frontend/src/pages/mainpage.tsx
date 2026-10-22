@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 import { NavBar } from "../comps/navbar.tsx";
 import { EventBar } from "../comps/event.tsx";
 import { ProjectCard } from "../comps/projects.tsx";
@@ -32,8 +32,6 @@ export function MainPage(){
 	const { mutate, updateSuccess, updateLoading, updateIsErr, updateErr } = update();
 	const commits = useCommits();
 
-
-
 	const locationRender = useUnmount(hovered, 3000);
 	const voteRender = useUnmount(openVote, 500);
 	const toolsRender = useUnmount(viewTools.view, 300);
@@ -46,11 +44,36 @@ export function MainPage(){
 		window.open(target?.link, "__blank", "noopener, noreferrer")
 	};
 
-	
+	const MemoNav = memo(NavBar);
+	const MemoAbout = memo(About);
+	const MemoLocation = memo(Location);
+	const MemoLearnMore = memo(LearnMore);
+	const MemoProjectCard = memo(ProjectCard);
+	const MemoBg = memo(Background);
+	const MemoHob = memo(Hobbies);
+	const MemoPhil = memo(Philosophy);
+
+
+	const CbHandleOpenLearnMore = useCallback(() => {
+		handleOpenLearnMore();
+	},[]);
+	const CbHandleHovered = useCallback(() => {
+		setHovered((prev:boolean) => !prev);
+	},[]);
+	const CbHandleOpenProject = useCallback((title:string) => {
+		handleOpenProject(title)
+	},[]);
+	const CbSetDisplay = useCallback((section:SECTION) => {
+		setDisplay(section);
+	},[]);
+	const CbHandleOpenVote = useCallback(() => {
+		setOpenVote((prev:boolean) => !prev);
+	},[]);	
+
 	return(
 		<div className="mainPage">
 			{locationRender && (
-				<Location
+				<MemoLocation
 					hovered={hovered}
 					marylandImgs={marylandImgs}
 				/>
@@ -72,25 +95,25 @@ export function MainPage(){
 				/>
 			)}
 			<header className="header">
-				<NavBar 
-					handleOpenVote={handleOpenVote} 
-					handleOpenLearnMore={handleOpenLearnMore}
+				<MemoNav 
+					handleOpenVote={CbHandleOpenVote}
+					handleOpenLearnMore={CbHandleOpenLearnMore}
 				/>
 			</header>
 			<div className="mainPageBody">	
 				{learnRender && (
-					<LearnMore 
-						openLearnMore={learnMore}
+					<MemoLearnMore 
+						openLearnMore={CbHandleOpenLearnMore as any}
 						display={display}
-						setDisplay={setDisplay}
-						close={setLearnMore}
-						comps={{ Background, Hobbies, Philosophy }}
+						setDisplay={CbSetDisplay as any}
+						close={CbHandleOpenLearnMore}
+						comps={{ MemoBg, MemoHob, MemoPhil} as any}
 					/>
 				)}
 				<div className="primaryGridContainer">
-					<About 
-						handleOpenLearnMore={handleOpenLearnMore}
-						setHovered={setHovered}
+					<MemoAbout 
+						handleOpenLearnMore={CbHandleOpenLearnMore}
+						setHovered={CbHandleHovered as any}
 					/>
 					<div className="primaryGridFooter">
 						{languages.map((lang:{ name:string, icon:any, tools?:Array<{ name:string, icon:any }>}) => { 
@@ -125,11 +148,11 @@ export function MainPage(){
 						<h4 className="voteHeader">Vote</h4>
 						<div className="marqueeContainer">
 							<div className="marqueeGroup">
-								{voteLanguages.map((lang:{ name:string, icon:any}) => (
-									<div className="marqueeIcon" key={lang.name}>{lang.icon}</div>
+								{voteLanguages.map((lang:{ lang:string, icon:any}) => (
+									<div className="marqueeIcon" key={lang.lang}>{lang.icon}</div>
 								))}
-								{voteLanguages.map((lang:{ name:string, icon:any}) => (
-									<div className="marqueeIcon" key={lang.name} aria-hidden={true} >{lang.icon}</div>
+								{voteLanguages.map((lang:{ lang:string, icon:any}) => (
+									<div className="marqueeIcon" key={lang.lang} aria-hidden={true} >{lang.icon}</div>
 								))}
 							</div>
 						</div>
@@ -147,7 +170,7 @@ export function MainPage(){
 								    const c = commits.find((c:any) => c.project === p.repoName);
 								    const lastCommit = c?.commitData?.data[0];
 									 return (
-										<ProjectCard
+										<MemoProjectCard
 											  key={p.title}
 											  img={p.img}
 											  status={p.status}
@@ -160,7 +183,7 @@ export function MainPage(){
 											  commit={lastCommit}
 											  commitLoading={c?.commitLoading as boolean}
 											  commitErr={c?.commitErr as Error | null}
-											  openProject={handleOpenProject}
+											  openProject={CbHandleOpenProject}
 										/>
 								    );
 							 })
