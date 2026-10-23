@@ -21,17 +21,17 @@ import type { SECTION } from "../types/about.d.ts";
 
 export function MainPage(){
 	const [totalVotes, setTotalVotes] = useState<Array<VOTE>>([]);
-	const [vote, setVote] = useLocalStorage("vote", { voted:false, language:"" })
+	const [vote, setVote] = useLocalStorage("vote", { voted:false, language:"" });
 	const [hovered, setHovered] = useState<boolean>(false);
 	const [openVote, setOpenVote] = useState<boolean>(false);
 	const [display, setDisplay] = useState<SECTION>("Background");
 	const [learnMore, setLearnMore] = useState<boolean>(false);
 	const [viewTools, setViewTools] = useState<{ view:boolean, lang:string }>({ view:false, lang:"" });
 	const { get, update } = useVotes({ setTotalVotes, setVote });
+
 	const { getLoading, getIsErr, getErr } = get();
 	const { mutate, updateSuccess, updateLoading, updateIsErr, updateErr } = update();
 	const commits = useCommits();
-
 	const locationRender = useUnmount(hovered, 3000);
 	const voteRender = useUnmount(openVote, 500);
 	const toolsRender = useUnmount(viewTools.view, 300);
@@ -54,21 +54,11 @@ export function MainPage(){
 	const MemoPhil = memo(Philosophy);
 
 
-	const CbHandleOpenLearnMore = useCallback(() => {
-		handleOpenLearnMore();
-	},[]);
-	const CbHandleHovered = useCallback(() => {
-		setHovered((prev:boolean) => !prev);
-	},[]);
-	const CbHandleOpenProject = useCallback((title:string) => {
-		handleOpenProject(title)
-	},[]);
-	const CbSetDisplay = useCallback((section:SECTION) => {
-		setDisplay(section);
-	},[]);
-	const CbHandleOpenVote = useCallback(() => {
-		setOpenVote((prev:boolean) => !prev);
-	},[]);	
+	const CbHandleOpenLearnMore = useCallback(() => handleOpenLearnMore(), []);
+	const CbHandleHovered = useCallback(() => setHovered((prev:boolean) => !prev), []);
+	const CbHandleOpenProject = useCallback((title:string) => handleOpenProject(title), []);
+	const CbSetDisplay = useCallback((section:SECTION) => setDisplay(section),[]);
+	const CbHandleOpenVote = useCallback(() => setOpenVote((prev:boolean) => !prev), []);	
 
 	return(
 		<div className="mainPage">
